@@ -143,8 +143,8 @@ function SkyPredictor() {
 	    var destination = "";
 
 	    if (observer.id === undefined) {
-	        locationStr = Tracker.LatitudeDegrees.value + "° " + Tracker.LatitudeDirection.value + ", " +
-	            Tracker.LongitudeDegrees.value + "° " + Tracker.LongitudeDirection.value;
+	        locationStr = Tracker.LatitudeDegrees.value + "&deg; " + Tracker.LatitudeDirection.value + ", " +
+	            Tracker.LongitudeDegrees.value + "&deg; " + Tracker.LongitudeDirection.value;
 
 	        hashUrl = Tracker.LatitudeDegrees.value + "," + Tracker.LatitudeDirection.value + "," +
 	            Tracker.LongitudeDegrees.value + "," + Tracker.LongitudeDirection.value;

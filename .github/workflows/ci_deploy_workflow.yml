@@ -50,4 +50,4 @@ jobs:
         python-version: 3.x
     - name: Sync Changed Files to S3
       run: |-
-        python /tmp/s3-sync-changes.py '.' 's3://findstarlink.com' --acl public-read --dryrun
+        python /tmp/s3-sync-changes.py '.' 's3://findstarlink.com' --acl public-read

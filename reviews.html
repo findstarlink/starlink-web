@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns= "http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Calculate when you can see the SpaceX Starlink satellites above your location">
+<title>SpaceX Starlink Satellites Tracker</title>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-62912842-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-62912842-3');
+</script>
+<style>
+  body {
+  	font-family: 'Arial';
+  	font-size: 12pt;
+  }
+  #headNote {
+  	border: 1px solid black;
+  	font-size: 10pt;
+  	padding: 5pt;
+  }
+  #formControls {
+    font-size: 11pt;
+  }
+  .formEl {
+  	padding: 2pt;
+  }
+  .hiddenEl {
+  	display: none;
+  }
+  li {
+    padding-top: 10pt;
+  }
+</style>
+<link rel="stylesheet" href="main.css?v=2020.6.12.3" />
+</head>
+<body>
+  <div id="reviewsPage" class="pageContent">
+    <div id="reviewsContent">
+      <div id="reviewsHeader" class="navHeader">
+        <span class="interactable backIcon navHeaderCol1" ripple="ripple" ripple-color="#3880ff">
+          <a href="/">
+          <svg class="icon" viewBox="0 0 512 512"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" class="ionicon-fill-none"></path></svg>
+          </a>
+        </span>
+
+        <span class="navHeaderCol2">
+          <span id="resultsTitle">Reviews & Press Mentions</span>
+        </span>
+
+        <span class="navHeaderCol3">
+          &nbsp;
+        </span>
+      </div>
+
+      <div>
+        <a href="https://www.forbes.com/sites/jamiecartereurope/2020/04/24/is-that-a-planet-a-star-or-a-spacex-starlink-the-five-best-augmented-reality-stargazing-apps-you-need-during-lockdown/#2d8b8b8044fe" target="_blank">
+          <svg class="mediaIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 54"><path d="M113.3 18.2c0-5.8.1-11.2.4-16.2L98.4 4.9v1.4l1.5.2c1.1.1 1.8.5 2.2 1.1.4.7.7 1.7.9 3.2.2 2.9.4 9.5.3 19.9 0 10.3-.1 16.8-.3 19.3 5.5 1.2 9.8 1.7 13 1.7 6 0 10.7-1.7 14.1-5.2 3.4-3.4 5.2-8.2 5.2-14.1 0-4.7-1.3-8.6-3.9-11.7-2.6-3.1-5.9-4.6-9.8-4.6-2.6 0-5.3.7-8.3 2.1zm.3 30.8c-.2-3.2-.4-12.8-.4-28.5.9-.3 2.1-.5 3.6-.5 2.4 0 4.3 1.2 5.7 3.7 1.4 2.5 2.1 5.5 2.1 9.3 0 4.7-.8 8.5-2.4 11.7-1.6 3.1-3.6 4.7-6.1 4.7-.8-.2-1.6-.3-2.5-.4zM41 3H1v2l2.1.2c1.6.3 2.7.9 3.4 1.8.7 1 1.1 2.6 1.2 4.8.8 10.8.8 20.9 0 30.2-.2 2.2-.6 3.8-1.2 4.8-.7 1-1.8 1.6-3.4 1.8l-2.1.3v2h25.8v-2l-2.7-.2c-1.6-.2-2.7-.9-3.4-1.8-.7-1-1.1-2.6-1.2-4.8-.3-4-.5-8.6-.5-13.7l5.4.1c2.9.1 4.9 2.3 5.9 6.7h2V18.9h-2c-1 4.3-2.9 6.5-5.9 6.6l-5.4.1c0-9 .2-15.4.5-19.3h7.9c5.6 0 9.4 3.6 11.6 10.8l2.4-.7L41 3zm-4.7 30.8c0 5.2 1.5 9.5 4.4 12.9 2.9 3.4 7.2 5 12.6 5s9.8-1.7 13-5.2c3.2-3.4 4.7-7.7 4.7-12.9s-1.5-9.5-4.4-12.9c-2.9-3.4-7.2-5-12.6-5s-9.8 1.7-13 5.2c-3.2 3.4-4.7 7.7-4.7 12.9zm22.3-11.4c1.2 2.9 1.7 6.7 1.7 11.3 0 10.6-2.2 15.8-6.5 15.8-2.2 0-3.9-1.5-5.1-4.5-1.2-3-1.7-6.8-1.7-11.3C47 23.2 49.2 18 53.5 18c2.2-.1 3.9 1.4 5.1 4.4zm84.5 24.3c3.3 3.3 7.5 5 12.5 5 3.1 0 5.8-.6 8.2-1.9 2.4-1.2 4.3-2.7 5.6-4.5l-1-1.2c-2.2 1.7-4.7 2.5-7.6 2.5-4 0-7.1-1.3-9.2-4-2.2-2.7-3.2-6.1-3-10.5H170c0-4.8-1.2-8.7-3.7-11.8-2.5-3-6-4.5-10.5-4.5-5.6 0-9.9 1.8-13 5.3-3.1 3.5-4.6 7.8-4.6 12.9 0 5.2 1.6 9.4 4.9 12.7zm7.4-25.1c1.1-2.4 2.5-3.6 4.4-3.6 3 0 4.5 3.8 4.5 11.5l-10.6.2c.1-3 .6-5.7 1.7-8.1zm46.4-4c-2.7-1.2-6.1-1.9-10.2-1.9-4.2 0-7.5 1.1-10 3.2s-3.8 4.7-3.8 7.8c0 2.7.8 4.8 2.3 6.3 1.5 1.5 3.9 2.8 7 3.9 2.8 1 4.8 2 5.8 2.9 1 1 1.6 2.1 1.6 3.6 0 1.4-.5 2.7-1.6 3.7-1 1.1-2.4 1.6-4.2 1.6-4.4 0-7.7-3.2-10-9.6l-1.7.5.4 10c3.6 1.4 7.6 2.1 12 2.1 4.6 0 8.1-1 10.7-3.1 2.6-2 3.9-4.9 3.9-8.5 0-2.4-.6-4.4-1.9-5.9-1.3-1.5-3.4-2.8-6.4-4-3.3-1.2-5.6-2.3-6.8-3.3-1.2-1-1.8-2.2-1.8-3.7s.4-2.7 1.3-3.7 2-1.4 3.4-1.4c4 0 6.9 2.9 8.7 8.6l1.7-.5-.4-8.6zm-96.2-.9c-1.4-.7-2.9-1-4.6-1-1.7 0-3.4.7-5.3 2.1-1.9 1.4-3.3 3.3-4.4 5.9l.1-8-15.2 3v1.4l1.5.1c1.9.2 3 1.7 3.2 4.4.6 6.2.6 12.8 0 19.8-.2 2.7-1.3 4.1-3.2 4.4l-1.5.2v1.9h21.2V49l-2.7-.2c-1.9-.2-3-1.7-3.2-4.4-.6-5.8-.7-12-.2-18.4.6-1 1.9-1.6 3.9-1.8 2-.2 4.3.4 6.7 1.8l3.7-9.3z"></path></svg>
+        </a>
+        <a href="https://www.floridatoday.com/story/tech/science/space/2020/01/24/how-to-see-spacex-starlink-satellites-after-liftoff-from-cape-canaveral/4532807002/" target="_blank">
+          <img class="mediaIcon" src="media/florida-today.png" />
+        </a>
+        
+        <a href="https://www.wired.it/scienza/spazio/2019/05/31/starlink-satelliti-musk-minaccia-stelle/?refresh_ce=" target="_blank">
+          <img class="mediaIcon" src="media/wired-it.png" />
+        </a>
+        
+        <a href="https://uk.news.yahoo.com/sightings-spacex-starlink-satellites-spark-215157610.html" target="_blank">
+          <img class="mediaIcon" src="media/yahoo-news.png" />
+        </a>
+
+        <br/><br/>
+
+        <a href='#press'>(see more press mentions)</a>
+      </div>
+
+      <!--div id="headNote">
+        <p><b>Update (May 29): the Starlink "train" event is now mostly over. The Starlink satellites have spread out a lot, and only a few are visible to the naked eye now, and appear as single dots of light, not a line.</b></p>
+
+        <p>Thanks for your interest in watching Starlink, and if you've developed an interest in watching the beautiful night sky, you can <a href="http://www.seasky.org/astronomy/astronomy-calendar-current.html" target="_blank" id="closureCalendar">keep track of upcoming night sky events</a>, participate in <a href="https://www.skyandtelescope.com/community/" target="_blank" id="closureNearby">stargazing communities near you</a>, or hang out in <a href="https://www.reddit.com/r/Astronomy/" target="_blank" id="closureRAstro">astronomy</a> and <a href="https://www.reddit.com/r/space" target="_blank" id="closureRSpace">space</a> groups. There's always something amazing happening in the night sky and space! :)</p>
+
+        <p><b>Did this page work? Yes,</b> according to <a href="reviews.html" target="_blank">the people</a> who contacted me to report successful sighting using this tool. It was mentioned on a couple of <a href="reviews.html#press" target="_blank">press websites</a>, resulting in about 105,577 unique visitors who searched 136,194 times, in the 4 days this page was online. Thank you to all the people who helped more people see this amazing event, and I'd <a href="mailto:dev@cmdr2.org">love to hear</a> about your starlink sightings.</p>
+      </div-->
+
+      <h2>Confirmed sightings</h2>
+      <ul>
+        <li><em>"Saw them (Starlink 4,5), awesome! Thank you so much! From Maui"</em> - Annalesa (via email)</li>
+
+        <li><em>"Starlink 3-4 confirmation Feb8: Saw the train this morning at 06:15 from Norman OK with your help. Thanks very much! It was a thrill!"</em> - Elke (via email)</li>
+
+        <li><em>"Just letting you know Starlink 3 was spotted over Auckland New Zealand at 10.07pm 02/02/20 using your page."</em> - Andrea (via email)</li>
+
+        <li><em>"Hi - just to let you know, this morning a long line of bright silver ants (launch #4) went scooting overhead right on time (NZ). I saw Sputnik (or its booster) back in 1957, and now this. Brilliant!"</em> - Zennor (via email)</li>
+
+        <li><em>"Your site was helping me and my family finding star link last night over Berlin, Germany."</em> - René (via email)</li>
+
+        <li><em>"Just managed to see Starlink 3 at 9.30pm, 20th Feb, thanks to your website"</em> - Sue (via email)</li>
+
+        <li><em>"Your site gave me and my whole family an amazing experience like nothing I've ever witnessed before. I'm still full of joy 10 minutes later. Christchurch NZ"</em> - Vito (via email)</li>
+
+        <li><em>"Wonderful app, Saw the starlink chain passing over my hometown Leeuwarden, Netherlands in absolute clear evening sky at the calculated time!"</em> - Derk (via email)</li>
+        
+        <li><em>"I saw the starlink 3 train, perfectly exactly 7:25 like the app predicted, thanks a lot"</em> - Elimar (via email)</li>
+        
+        <li><em>"Just a quick thanks, I used the info on your site to enable me to few the satellites with my son."</em> - Simon (via email)</li>
+
+        <li><em>"Today I've intentionally Seen Star link5-6 (march 31 2020 at 0521 gmt+2)  as mentioned on your site, maybe the duration was a little bit longer."</em> - Lorenz (via email)</li>
+
+        <li><em>"I watched 18 satellites yesterday, and there might have been more. Timing was perfect."</em> - David (via email)</li>
+
+        <li><em>"So beautiful ! There was a big hole in the cloud cover overhead, with awesome viewing...... right on time."</em> - Ann (via email)</li>
+
+        <li><em>"It works :) Time and position was accurate"</em> - Andrej (via email)</li>
+
+        <li><em>"Yes was able to see the satellites.  A little off on the time, but gave us a good indication and with patience, voila!!  Great sight."</em> - Gary (via email)</li>
+
+        <li><em>"Right on time! I just saw Starlink3,4."</em> - Sandy (via email)</li>
+
+        <li><em>"Starlink finder works great! I used it predawn Fri Feb 7 to look for Starlink group 3 and was rewarded with a great view of the satellites passing through the Big Dipper!"</em> - Richard (via email)</li>
+
+        <li><em>"My wife and I saw the satellites tonight (17 Feb) in Tucson Az exactly where your program said they would be."</em> - Ken (via email)</li>
+
+        <li><em>"I had lot of views thanks to your app :)"</em> - Csaba (via email)</li>
+
+        <li><em>"Yes using it and it works. Cheers"</em> - Jim (via email)</li>
+
+        <li><em>"Happy to report that after three failed attempts, this evening we were able to spot Starlink-3! The start time was pretty accurate, 18.32, while the satellites (quite many) kept coming longer than predicted in the app, up to about 18.45."</em> - András (via email)</li>
+
+        <li><em>"Saw your site then after putting in my location was able to see it again tonight right on time. Thanks so much!"</em> - Tracey (via email)</li>
+
+        <li><em>"just wanted to say thank you for the information & great site! I used the info below to view the satellites from Gateshead in the UK this morning"</em> - Stephen (via email)</li>
+
+        <li><em>"I am in Rangioa nz and you are spot on with your calculation.just seen it 9.53 "</em> - Jedd (via email)</li>
+
+        <li><em>"a friend sent me the link to your website and it was almost the time: it was amazing to see the full "star squad" moving from SW to NE, as it was stated!"</em> - Ya Huí (via email)</li>
+
+        <li><em>"Thanks for the website,  spot on for viewing in NZ usedsite to watch 2 nights in a row."</em> - Benjamin (via email)</li>
+
+        <li><em>"WhatsApp'ed my friends when to watch the sky and we all saw the Space Train!"</em> - TC (via email)</li>
+
+        <li><em>"I used your page to find Starlink and it was AWESOME!  Time and orientation were spot on. Visibility lasted longer than expected. I think I counted 24 individual satellites!"</em> - Scott (via email)</li>
+
+        <li><em>"I saw starlink today on 20 Mar 2020 morning @5:55 IST. It's a very interesting scene that I could enjoy because of this site."</em> - Ram (via email)</li>
+
+        <li><em>"Just seen star link 4 over Aylesbury, UK spectacularly and only a minute late. Absolutely spectacular!!! Thank you!"</em> - Kevin (via email)</li>
+
+        <li><em>"Saw Starlink 3 from Cottonwood, AZ this am precisely on time – only counted 6 satellites."</em> - Richard (via email)</li>
+
+        <li><em>"Saw satellites in NZ at 10.07pm as per your prediction"</em> - Stevo (via email)</li>
+
+        <li><em>"Hi from Hamilton, New Zealand. Finally got to see the satellites tonight, they went overhead around 8.15pm tonight. Thanks for giving us the approx times."</em> - Karen (via email)</li>
+
+        <li><em>"Watched the new Starlink 2 at 0556 here in Houston just as the website said. Very dark and clear sky, was brilliant to watch. Thank you!"</em> - JJ (via email)</li>
+
+        <!--li><em>"Starlink 2: Saw it, right over the house in Maui this morning! Thank you!"</em> - Annalesa (via email)</li-->
+
+        <li><em>"I just wanted to say thank you for your work in making the data into an easy to interpret format. I have been able to see both starlink 1 and 2 because of it. I even got to show some of my coworkers."</em> - <a href="https://www.reddit.com/r/SpaceXLounge/comments/eojvv1/good_starlink_viewing_chances_for_north_america/fejd3ku?utm_source=share&utm_medium=web2x" target="_blank">u/EvoPat</a> (on reddit)</li>
+
+        <li><em>"I just saw the Starlink-2 train pass by and the time on the website was spot on! It was really amazing and i can't thank you enough"</em> - Linecraftman (via email)</li>
+
+        <li><em>"Saw the satellites this morning 7 Jan. Live just north of San Diego. GREAT VIEWING! Right on time with your site prediction."</em> - Richard (via email)</li>
+
+        <li><em>"Thanks for the accurate data which led us to Venice Beach Florida this evening to witness Starlink satellites right on time as predicted."</em> - Rick (via email)</li>
+
+        <li><em>"I saw Starlink-3 and Starlink-2 earlier today in Croatia, as predicted. Thank you!"</em> - Mihaela (via email)</li>
+
+        <li><em>"I saw the Starlink satellites from Buenos Aires - Argentina using your app for Android. Very accurate data, only missed for 30 seconds. Keep the good work!"</em> - Matias (via email)</li>
+
+        <li><em>"dude, thanks to you I actually saw the Starlink train this morning in Belgium, Europe :-) Magic."</em> - <a href="https://www.reddit.com/r/Starlink/comments/evmu3o/spacex_is_launching_60_more_starlink_satellites/ffxi3hd?utm_source=share&utm_medium=web2x" target="_blank">u/Rxke2</a> (on reddit)</li>
+
+        <li><em>"thanks for this, I got to see Starlink 2 thanks to you ! :) my kids loved to see them :)"</em> - <a href="https://www.reddit.com/r/spacex/comments/eudve3/rspacex_starlink_3_official_launch_discussion/ffwrg0c?utm_source=share&utm_medium=web2x" target="_blank">u/readball</a> (on reddit)</li>
+
+        <li><em>"Pretty much on schedule between 10pm & 10.08pm in Greytown New Zealand"</em> - Anne (via email)</li>
+
+        <li><em>"Thank you for putting the effort in. The information is well presented and organised. I got a great view of Starlink 2 over the UK a few nights ago from the your site"</em> - <a href="https://www.reddit.com/r/spacex/comments/eudve3/rspacex_starlink_3_official_launch_discussion/ffz9sl9?utm_source=share&utm_medium=web2x" target="_blank">u/AvariceInHinterland</a> (on reddit)</li>
+
+        <li><em>"Thanks to your info I was able to see the Starlink 2 satellites just outside Worcester (UK) today and yesterday!"</em> - Peter (via email)</li>
+
+        <li><em>"Omaha NE 1/9/2020.  Clear night... satellites appeared at time and position specified. Nice show. Thanks."</em> - Jim (via email)</li>
+
+        <li><em>"Thanks for your help I saw them Tonight go right past my house  brilliant. Thank you"</em> - Helen (via email)</li>
+
+        <li><em>"We live north of Sydney your timing was correct. Many thanks for your informative and accurate page."</em> - Gary (via email)</li>
+
+        <li><em>"My family and I were delighted to see the spectacle of the train when and where you said it would be!"</em> - Pete (via email)</li>
+
+        <li><em>"Thank you for the info. The stunning sight of 35 satellites in a train last night over Wiltshire for over 20 minutes is credited to you."</em> - Stewart (via email)</li>
+
+        <li><em>"Your timings are spot on."</em> - Barry (via email)</li>
+
+        <li><em>"We just watched Starlink-2 train go over, per your schedule, from Boulder CO"</em> - Jonathan (via email)</li>
+
+        <li><em>"both times i used your site it was accurate thank you"</em> - streetracer_124 (via email)</li>
+
+        <li><em>"Just used your site to watch the Starlink train. Thank you for your awesome website."</em> - Shahar (via reddit)</li>
+
+        <li><em>"I was able to see the starlink 4/5 train faintly from my home in Paraparaumu shortly after 10pm local time 24 Feb 2020."</em> - Andy (via email)</li>
+
+        <li><em>"Fabulous - thanks so much.  We live in the South West of France and had a great view this evening"</em> - Magda (via email)</li>
+
+        <li><em>"We just saw the string of satellites in billings montana"</em> - Kelly (via email)</li>
+
+        <li><em>"Thanks for the starlink tracking page. Worked out well today in Austria. Second time chasing and this time successful."</em> - Florian (via email)</li>
+
+        <li><em>"I'm very happy because this day, in the morning, I was able to spot the StarLink satellite train. I located it at 05:58 Mexico time. Thank you very much for the software support. good job"</em> - Gaudencio (via email)</li>
+
+        <li><em>"I saw Starlink using your application. The Saturday before Christmas!"</em> - Tip and Melissa (via email)</li>
+
+        <li><em>"I could perfectly view by naked eye using the live tracker"</em> - Wolfram (via email)</li>
+
+        <li><em>"I really like your website, it is pretty clean an easy to understand. It already did help me out once, and I was so happy seeing them."</em> - Swoosh (via email)</li>
+
+        <li><em>"I’ve just seen the satelites according to the estimated timing. In Hungary."</em> - János (via email)</li>
+
+        <li><em>"Last Feb 3th i could see starlink1 following your tracker. The timing was 21:06 (my local time), but I think I could see them pass through the sky 2 or 3 minutes later. The visibility was perfect. I counted at least 20 satelites."</em> - Osvaldo (via email)</li>
+
+        <li><em>"Thank you so much for this! I just saw them flying over Hokkaido, Japan!"</em> - <a href="https://www.reddit.com/r/SpaceXLounge/comments/bswv6w/wrote_a_tool_to_help_you_calculate_when_starlink/eoum48l?utm_source=share&utm_medium=web2x" target="_blank">japonica-rustica</a></li>
+
+        <li><em>"Just watched em fly overhead because of this! Thanks!"</em> - <a href="https://www.reddit.com/r/space/comments/bsnxr7/if_you_saw_a_string_of_lights_just_now_in_the_sky/eotp8gb?utm_source=share&utm_medium=web2x" target="_blank">DeoInvicto</a></li>
+
+        <li><em>"Perfectly saw Starlink thanks to you site!"</em> - Guglielmo (via email)</li>
+
+        <li><em>"I used the information from your site to see one of the OLD starlinks from Long Bay Park in the North Shore of Auckland, NZ on Sunday Feb 9. Your information was very precise and accurate with the timing and directions. Thank you very much!"</em> - Cooper (via email)</li>
+
+        <li><em>"Just letting you know I successfully used your tracker to see the new starlink satellites this evening."</em> - Candace (via email)</li>
+
+        <li><em>"We have found the train on a few occassions because of your schedule. We really appreciate it. Always when you say it will be."</em> - Karen (via email)</li>
+
+        <li><em>"Worked. Saw them in Germany at 6 pm"</em> - Dr. Gunnar (via email)</li>
+
+        <li><em>"I saw over hyde in cheshire thanks"</em> - Mark (via email)</li>
+
+        <li><em>"I saw the Starlink at the very exact time and location as per the page. Thanks"</em> - Pushkaraj (via email)</li>
+
+        <li><em>"Hy im from slovakia. We successfully seeing Starlink using this page. Super !!!!!"</em> - Ronald (via email)</li>
+
+        <li><em>"Hi, yes I used your info to see starlink 4,5 satellite "</em> - Lisa (via email)</li>
+
+        <li><em>"Just saw string of  satellites  amazing  wow what a sight"</em> - Con O' Sullivan (via email)</li>
+        
+        <li><em>"Just watched them pass over Arizona. It was an amazing sight to see."</em> - <a href="https://www.reddit.com/r/SpaceXLounge/comments/bswv6w/wrote_a_tool_to_help_you_calculate_when_starlink/eotompv?utm_source=share&utm_medium=web2x" target="_blank">xbolt90</a></li>
+        
+        <li><em>"F.. hell why isn't this higher up? It is so much easier to use."</em> - <a href="https://www.reddit.com/r/space/comments/bsnxr7/if_you_saw_a_string_of_lights_just_now_in_the_sky/eotmtzj?utm_source=share&utm_medium=web2x" target="_blank">My_Reddit_Main</a></li>
+        
+        <li><em>"Thank you ! Just saw the trail passing over France. It is truly something."</em> - <a href="https://www.reddit.com/r/SpaceXLounge/comments/bswv6w/wrote_a_tool_to_help_you_calculate_when_starlink/eosh2bq?utm_source=share&utm_medium=web2x" target="_blank">Zvahrog</a></li>
+        
+        <li><em>"Just wanted to thank you for the easy-to-use starlink tracker! It worked flawlessly for me in czech republic, at least regarding the observation times, the angle seems to be a bit off but thats to be expected."</em> - Thomas (via email)</li>
+
+        <li><em>"Starlink-1: I saw the satellites today between 17.48 and 17.54 crossing nearly the whole sky from NW to E. My location is in South-Germany."</em> - Martin (via email)</li>
+
+        <li><em>"it did get it right yesterday and I saw the train clearly"</em> - Pete (via email)</li>
+        
+        <li><em>"I used me.cmdr2.org/starlink as the time to start looking and celestrak.com for a more or less live view to find them. Worked out ok"</em> - <a href="https://www.reddit.com/r/spacex/comments/bta28h/after_witnessing_the_60_starlink_satellites_fly/eowb5qj?utm_source=share&utm_medium=web2x" target="_blank">nikilase</a></li>
+        
+        <li><em>"I used http://me.cmdr2.org/starlink/ which worked much quicker with less hassle. I was able to see them last night at about 35.55 North, 84.04 West"</em> - <a href="https://www.reddit.com/r/spacex/comments/bta28h/after_witnessing_the_60_starlink_satellites_fly/eoxow8s?utm_source=share&utm_medium=web2x" target="_blank">dhanson865</a> (and via email)</li>
+
+        <li><em>"I've used your time calculator the last 2 nights...1 in Yuma, Arizona and 1 in Queen Creek, Arizona. Pretty much SPOT ON with Phoenix. Just had to wait an extra 5 or 10 minutes."</em> - Kevin (via email)</li>
+
+        <li><em>"Working fine from Hermosillo, Mexico. Thank you"</em> - Francisco (via email)</li>
+
+        <li><em>"Your prediction matched well with using Stellarium with the TLEs from Norad"</em> - Theo (via email from Nashville)</li>
+
+        <li><em>"Hi. I have Seen the Startrain from germany, Stuttgart. Works good!"</em> - Moriz (via email)</li>
+
+        <li><em>"I was able to see the Star link using your website in Southwest Wisconsin. Thanks"</em> - Dave (via email)</li>
+
+        <li><em>"Worked perfect. timing was correct to at least the nearest minute."</em> - Sam (via email)</li>
+
+        <li><em>"I can see the satellites in Alicante, Spain in time! Thank you so much!"</em> - Javier (via email)</li>
+
+        <li><em>"I saw the satellites using your tracking calculator! Thank you so much for making it so easy."</em> - Ben (via email)</li>
+
+        <li><em>"Thanks for your page it's really helpful to see the satellites in real-time. we saw them today from mallorca, Spain"</em> - Robert (via email)</li>
+
+        <li><em>"I used http://me.cmdr2.org/starlink/#1522 to get a rough time for when the Starlink production test satellites would fly over Northampton UK"</em> - <a href="https://sites.google.com/site/exosnews/spacex/satellites/starlink-blog" target="_blank">exosnews</a></li>
+
+        <li><em>"Seen 2 of them Yesterday. South of France. Cannot take pictures.I will try next days. Thanks a lot for this page."</em> - Jérôme (via email)</li>
+      </ul>
+
+      <a id="press"><h2>Press mentions</h2></a>
+      <small><b>Please note:</b> <em>me.cmdr2.org/starlink was the old address of this site.</em></small>
+      <ul>
+        <li><em>"To find out exactly when a Starlink train will be visible from your precise location, visit the Find Starlink website and just enter your location.."</em> - <a href="https://www.forbes.com/sites/jamiecartereurope/2020/04/24/is-that-a-planet-a-star-or-a-spacex-starlink-the-five-best-augmented-reality-stargazing-apps-you-need-during-lockdown/#2d8b8b8044fe" target="_blank">Forbes</a></li>
+
+        <li><em>"According to satellite tracker Find Starlink, the satellites will be visible from .."</em> - <a href="https://www.express.co.uk/news/science/1293092/starlink-tracker-UK-how-to-see-spacex-satellites-tonight-elon-musk" target="_blank">Daily Express</a></li>
+
+        <li><em>"..all you have to do is plug your coordinates into a platform like cmdr2"</em> - <a href="https://www.businessinsider.in/heres-how-you-can-spot-musks-starlink-satellite-train-in-the-sky-where-you-live/articleshow/69531597.cms" target="_blank">Business Insider</a></li>
+
+        <li><em>"..as predicted by the Calsky, N2YO and CMDR2 websites. Keep checking these and other satellite-tracking sites for future sighting opportunities"</em> - <a href="https://uk.news.yahoo.com/sightings-spacex-starlink-satellites-spark-215157610.html" target="_blank">Yahoo! News</a></li>
+
+        <li><em>"Insane SpaceX Starlink Satellite Train Flyover Video (Update)"</em> - <a href="http://nasawatch.com/archives/2019/05/insane-spacex-s.html" target="_blank">NASA Watch</a></li>
+
+        <li><em>"A newly-launched online tool lets you track when SpaceX’s Starlink satellites will fly over your city."</em> - <a href="https://www.ibtimes.com/find-out-when-spacex-starlink-satellites-will-fly-over-your-city-2796269" target="_blank">International Business Times</a></li>
+
+        <li><em>"..here you can find the orbit calculations if you want to see them in person"</em> - <a href="https://www.wired.it/scienza/spazio/2019/05/31/starlink-satelliti-musk-minaccia-stelle/?refresh_ce=" target="_blank">WIRED</a></li>
+
+        <li><em>"..Those other sites include CalSky and CMDR2."</em> - <a href="https://www.geekwire.com/2019/sightings-spacexs-starlink-satellites-spark-awe-astronomical-angst/" target="_blank">Geekwire</a></li>
+
+        <li><em>"me.cmdr2.org/starlink/ has a straightforward, visual view of the latest Starlink satellite locations"</em> - <a href="https://www.floridatoday.com/story/tech/science/space/2020/01/24/how-to-see-spacex-starlink-satellites-after-liftoff-from-cape-canaveral/4532807002/" target="_blank">Florida Today</a></li>
+
+        <li><em>"Anyone hoping to watch the Starlink satellites pass overhead can follow their progress in real-time through the Find Starlink website"</em> - <a href="https://www.independent.co.uk/life-style/gadgets-and-tech/news/spacex-starlink-satellites-visible-when-elon-musk-a9561121.html" target="_blank">Independent</a></li>
+
+        <li><em>"Here's a handy tool to calculate when you'll see the next Starlink pass"</em> - <a href="https://twitter.com/fcain/status/1133487731797946368" target="_blank">Fraser Cain (Universe Today)</a></li>
+
+        <li><em>"Starlink Satellite Tracker is super-easy to use"</em> - <a href="http://astrobob.areavoices.com/2019/05/26/how-to-see-the-insanely-amazing-starlink-satellite-train-from-your-home/" target="_blank">Astro Bob</a></li>
+
+        <li><em>"This Tool Tells You When the Starlink Satellites Will Pass over Your City"</em> - <a href="https://interestingengineering.com/this-tool-tells-you-when-the-starlink-satellites-will-pass-over-your-city" target="_blank">Interesting Engineering</a></li>
+
+        <li><em>"For the latest information on the satellites' position.."</em> - <a href="https://edmonton.ctvnews.ca/it-s-not-aliens-reports-of-dozens-of-ufos-in-straight-line-turn-out-to-be-spacex-satellites-1.4747719" target="_blank">CTV News</a></li>
+
+        <li><em>"..online tools to predict which cities it will pass over"</em> - <a href="https://www.brisbanetimes.com.au/technology/fears-musk-s-satellites-will-change-our-view-of-the-night-sky-20190528-p51s30.html" target="_blank">Brisbane Times</a></li>
+
+        <li><em>"According to satellite tracking website cmdr2.org, it calculates that Starlink should be visible in the UK at the following times.."</em> - <a href="https://www.somersetlive.co.uk/news/strange-dots-light-sky-over-3688659" target="_blank">Somerset Live</a> and <a href="https://www.devonlive.com/news/devon-news/strange-dots-light-phenomenon-spotted-3688491" target="_blank">Devon Live</a></li>
+
+        <li><em>"A satellite tracking site has calculated the times and coordinates for when the Starlink satellites will be above each of our main cities"</em> - <a href="https://www.newshub.co.nz/home/world/2019/05/how-to-see-spacex-s-spectacular-starlink-satellite-train.html" target="_blank">Newshub.co.nz</a></li>
+
+        <li><em>"This page helps you calculate when the Starlink satellites are expected to be above your city"</em> - <a href="https://www.aviation24.be/space/spacex/spectacular-coverage-spacex-starlink-mission-train-satellites/" target="_blank">Aviation24.be</a></li>
+        <li><em>"..a new tool for finding out when the Starlink satellites will pass over your location. We can’t vouch for its accuracy, but it’s very easy to use."</em> - <a href="https://earthsky.org/space/wow-photo-video-spacex-starlink-satellite-train" target="_blank">EarthSky</a></li>
+        <li><em>"If you’d like to check when the Starlink satellites will pass over your location, here’s a new tool that help you easily do so."</em> - <a href="https://petapixel.com/2019/05/25/heres-a-spacex-starlink-satellite-train-caught-on-camera-in-the-night-sky/" target="_blank">PetaPixel</a></li>
+        <li><em>"According to http://me.cmdr2.org/starlink/ here's when you can see the satellites, again, in Paducah"</em> - <a href="https://www.wpsdlocal6.com/2019/05/26/spacex-starlink-satellite-passes-over-paducah/" target="_blank">WPSD LocaL 6</a></li>
+        <li><em>"Regardez le cortège de 60 satellites de SpaceX défiler cette nuit" - <a href="https://www.futura-sciences.com/sciences/breves/astronomie-regardez-cortege-60-satellites-spacex-defiler-cette-nuit-711/" target="_blank">Futura Sciences</a></em>
+
+        <li><em>"..qui trovate i calcoli effettuati da appassionati di astronomia"</em> - <a href="https://www.focus.it/scienza/spazio/satelliti-starlink-oscureranno-le-stelle-spacex" target="_blank">Focus.it</a></li>
+
+        <li><em>"Ezen az oldalon bárki átállíthatja a földrajzi helyzetet, hogy megtudja, a saját lakhelyén mikor észlelhetők a Starlink műholdak."</em> - <a href="https://index.hu/mindekozben/poszt/2019/12/26/ufo-k_szalltak_magyarorszag_folott_vagy_inkabb_elon_musk_legujabb_jatekai/" target="_blank">index.hu</a></li>
+
+        <li><em>"cmdr2製作了一個網頁讓大家查看「星鏈」飛越不同城市的時間。"</em> - <a href="https://fortuneinsight.com/web/posts/285461" target="_blank">Fortune Insight</a></li>
+
+        <li><em>"Several satellite tracking sites ... such as CalSky.com N2YO. com and me.cmdr2.org/starlink"</em> - <a href="https://vaaju.com/belgiumeng/watch-the-procession-of-60-spacex-satellites-paired-tonight/" target="_blank">Vaaju</a></li>
+        <li><em>"Everything is very simple, there is already a special calculation script available"</em> - <a href="http://kratko-news.com/2019/05/28/kak-uznat-vremya-proleta-sputnikov-starlink/" target="_blank">Kratko News</a></li>
+        <li><em>"Cómo buscar los satélites de StarLink en el cielo"</em> - <a href="https://www.xataka.com/espacio/impresionante-paso-60-satelites-starlink-spacex-tierra-video-asi-podemos-buscarlos-cielo" target="_blank">Xataka</a></li>
+
+        <li><em>"Find out when the satellites are over Luxembourg!"</em> - <a href="http://www.eldo.lu/aktuell/reportagen/91580.html" target="_blank">Eldoradio</a></li>
+
+        <li><em>"Beobachtungszeiten für unterschiedliche Standorte kann man mit diesem Tool berechnen"</em> - <a href="https://www.hna.de/netzwelt/spacex-satelliten-starlink-sorgen-ufo-meldungen-elon-musk-zr-12322162.html" target="_blank">hna.de</a></li>
+
+        <li><em>"Wie man die SpaceX-Satelliten beobachten kann"</em> - <a href="http://scienceblogs.de/alpha-cephei/2019/05/26/beobachtungstipp-eine-perlenkette-aus-60-satelliten/" target="_blank">scienceblogs.de</a></li>
+
+        <li><em>"Anyone who wants to know their location when Starlink satellites can be seen can get information on the Internet, including cmdr2.org"</em> - <a href="https://afaae.com/switzerland/starlink-satellites-pose-a-threat-to-astrophotography/" target="_blank">Afaae</a></li>
+
+        <li><em>"Starlink: Künftig mehr Satelliten als Sterne am Himmel?"</em> - <a href="https://www.dnn.de/Nachrichten/Wissen/Starlink-Satelliten-eine-Gefahr-fuer-die-Astrofotografie" target="_blank">Dresdner Neueste Nachrichten</a></li>
+
+        <li><em>"Several satellite tracking sites are already on the alert .. like CalSky.com, N2YO.com is me.cmdr2.org/starlink"</em> - <a href="https://www.archynewsy.com/watch-the-procession-of-60-spacex-satellites-parading-tonight/" target="_blank">archynewsy</a></li>
+      </ul>
+
+      <h2>Other mentions</h2>
+      <ul>
+        <li><em>"Useful website to track starlink train"</em> - <a href="https://www.reddit.com/r/space/comments/bszyb3/useful_website_to_track_starlink_train/" target="_blank">we0s</a></li>
+        <li><em>"I use me.cmdr2.org/starlink, which is designed specifically for Starlink passes"</em> - <a href="http://jrjohnson.net/the-astronomer/2020/01/07/spacex-starlink-2-mission/" target="_blank">AstroJim</a></li>
+        <li><em>"this site seems to work better on my phone for predicting passings."</em> - <a href="https://www.reddit.com/r/spacex/comments/bt32pn/starlink_tracking/eov34o3?utm_source=share&utm_medium=web2x" target="_blank">docyande</a></li>
+        <li><em>"This one's pretty good for putting in your coordinates and getting a list of upcoming sighting opportunities"</em> - <a href="https://www.reddit.com/r/spacex/comments/bt32pn/starlink_tracking/eov22ie?utm_source=share&utm_medium=web2x" target="_blank">OmegamattReally</a></li>
+        <li><em>"Here is a tracker of Redditor origin that is 100% less cancerous"</em> - <a href="https://www.reddit.com/r/Columbus/comments/btaeat/starlink_satellite_train_visible_over_columbus/eow04md?utm_source=share&utm_medium=web2x" target="_blank">ssl-3</a></li>
+        <li><em>"PSA: SpaceX's starlink satellite "train" of 60 satellites"</em> - <a href="https://www.reddit.com/r/southafrica/comments/bt5z5y/psa_spacexs_starlink_satellite_train_of_60/" target="_blank">DivNut</a></li>
+        <li><em>"Starlink satellites might be visible in the south"</em> - <a href="https://www.reddit.com/r/brisbane/comments/bt4sjz/5pm_today_26_may_if_i_am_read_link_correctly/?ref=readnext" target="_blank">tqft9999</a></li>
+        <li><em>"Starlink Satellite train will be passing by around 9:55pm tonight. Look West and fairly low in the sky"</em> - <a href="https://www.reddit.com/r/tampa/comments/btfgwq/starlink_satellite_train_will_be_passing_by/" target="_blank">tampa</a></li>
+        <li><em>"You might be able to see a line of Elon Musk's Starlink satellites passing by in the sky."</em> - <a href="https://www.reddit.com/r/japan/comments/bt54rm/tonight_at_around_900_pm_look_to_the_west_you/?ref=readnext" target="_blank">the5souls</a></li>
+        <li><em>"Here is a webpage to calculate how you can see them by your location"</em> - <a href="http://forums.baldmove.com/discussion/6225/starlink" target="_blank">CapeGabe</a></li>
+
+        <li><em>"Here is a nice tool to help find the next potential viewing"</em> - <a href="https://www.reddit.com/r/lakeland/comments/btfqqt/starlink_train_tonight/" target="_blank">Tromfin</a></li>
+
+        <li><em>"Расписание пролета группы спутников Starlink, запущенных Илоном Маском, с учетом координат наблюдателя"</em> - <a href="https://www.reddit.com/r/Pikabu/comments/btbdts/расписание_пролета_группы_спутников_starlink/" target="_blank">ptashik</a></li>
+
+        <li><em>"Easy enough to search for the specific latitude and longitude coordinates for Anytown and then just plug in. Happy hunting!"</em> - <a href="https://teslamotorsclub.com/tmc/threads/spacex-f9-starlink-0-9-slc-40.145555/page-5" target="_blank">Nikxice</a></li>
+
+        <li><em>"http://me.cmdr2.org/starlink/#1495 Elon Musk'un Starlink uydularının İstanbul semalarında görünme saatleri ve koordinatları."</em> - <a href="https://teknoseyir.com/durum/1086727" target="_blank">Mustafa</a></li>
+
+        <li><em>"This is super rad. Use this to see when it might be over your town."</em> - <a href="https://twitter.com/tungholio/status/1132479416762683392" target="_blank">@tungholio</a></li>
+
+        <li><em>"По ссылке http://me.cmdr2.org/starlink/ можно рассчитать пролёты этих 60 спутников #Starlink для любого города."</em> - <a href="https://ok.ru/asterionclub" target="_blank">Астрономическая обсерватория ПетрГУ "Астерион"</a></li>
+
+        <li><em>"See the Starlink satellites from Seattle: http://me.cmdr2.org/starlink/"</em> - <a href="https://twitter.com/AlicesAstroInfo/status/1132584054870560768" target="_blank">West Seattle Blog / Alice's AstroInfo</a></li>
+
+        <li><em>"Find where to look here"</em> - <a href="https://forums.qrz.com/index.php?threads/starlink.660128/" target="_blank" target="_blank">QRZ.com Forums</a></li>
+
+        <li><em>"Die Sichtbarkeit des momentanen "Sternenzuges" kann übrigens mit Hilfe dieses kleinen Programms ermittelt werden"</em> - <a href="https://zettelsraum.blogspot.com/2019/05/starlink.html" target="_blank">Zettels Raum</a></li>
+
+        <li><em>"Thank you, I found another link, there is easier for people like me"</em> - <a href="https://thealphacentauri.net/kak-nablyudat-prolet-spacex-starlink-v-vashem-gorode#comment-2743" target="_blank">Vitali Botezatou</a></li>
+      </ul>
+    </div>
+  </div>
+</body>

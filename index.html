@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns= "http://www.w3.org/1999/xhtml">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate when you can see the SpaceX Starlink satellites above your location">
+    <meta name="theme-color" content="#111">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <title>SpaceX Starlink Satellites Tracker</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-62912842-3"></script>
+    <script src="jquery.min.js"></script>
+    <script>
+        var jQ = jQuery.noConflict(true);
+    </script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-62912842-3', {
+            'page_path': window.location.pathname + window.location.search + window.location.hash
+        });
+    </script>
+    <link rel="stylesheet" href="main.css?v=2021.6.29.0" />
+    <style>
+        .headNote {
+            border: 1px solid #999;
+            font-size: 10pt;
+            padding: 8pt;
+            margin-bottom: 5px;
+            border-radius: 3px;
+            margin: 5px;
+        }
+        .error {
+            background: rgb(255, 220, 220);
+        }
+        .info {
+            background: #ffffdc;
+        }
+        
+        #formControls {
+            font-size: 11pt;
+        }
+        
+        .formEl {
+            padding: 2pt;
+        }
+        
+        .hiddenEl {
+            display: none;
+        }
+
+        #visibilityInfo {
+            border: 1px solid #999;
+            border-radius: 3px;
+            margin: 5px;
+            padding: 8pt;
+            display: none;
+        }
+        #visibilityInfo h3 {
+            margin: 0pt;
+        }
+        #visibilityInfo h4 {
+            margin: 0pt;
+            padding: 10pt 0pt 10pt 0pt;
+        }
+        #unlikelyTimes h4>small {
+            color: red;
+        }
+        .timingLine {
+            font-size: 10pt;
+            padding: 7pt 0pt 7pt 0pt;
+        }
+        .timingLineSelected {
+            background: rgb(253, 245, 230);
+            margin-left: -5pt;
+            padding-left: 5pt;
+            padding-right: 5pt;
+            border: 1pt solid rgb(255, 236, 200);
+        }
+        .timingDetails {
+            display: none;
+        }
+        .noTimingsMsg {
+            font-size: 10pt;
+        }
+        .satNameEntry {
+            display: inline-block;
+            width: 90pt;
+        }
+
+        
+        #store ul {
+            padding: 0px;
+            margin: auto;
+        }
+        #store li {
+            list-style-type: none;
+            display: inline;
+        }
+        #store h4 {
+            margin: 0px;
+            padding: 0px;
+            padding-bottom: 10pt;
+        }
+        #storeDisclosure {
+            color: #666;
+            font-size: 8pt;
+            text-align: right;
+            padding-top: 5pt;
+        }
+        
+        #mapContainer h4 {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        
+        #footer {
+            font-size: 12px;
+            border-top: 1px solid #eee;
+            padding: 10px;
+        }
+
+        #mce-success-response {
+            color: green;
+        }
+        
+        a.toggleUpdate {
+            margin: 10px;
+            text-decoration: none;
+        }
+        
+        .head {
+            display: block;
+            margin: 0;
+            padding: 10px;
+            background: #000;
+            color: #fff;
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        .productBox {
+            width: 100pt;
+            text-align: center;
+            display: inline-block;
+            vertical-align: top;
+            padding-bottom: 10pt;
+        }
+        .productBox a {
+            color: #0066c0;
+            text-decoration: none;
+            font-weight: normal;
+        }
+        .productImgHolder {
+            padding-bottom: 8pt;
+        }
+        .productImgHolder img {
+            height: 85pt;
+        }
+        .productTitle {
+            font-size: 10pt;
+        }
+
+        .singleProductImgHolder  {
+            text-align: center;
+        }
+        .singleProductImgCaption {
+            font-size: 10pt;
+            color: #666;
+            width: 95%;
+            text-align: center;
+        }
+        .singleProductHeadline {
+            font-size: 15pt;
+            font-weight: bold;
+            padding: 5pt 0pt 5pt 0pt;
+        }
+        .singleProductCopy {
+            font-size: 11pt;
+        }
+        .singleProductCTA {
+            font-size: 11pt;
+            padding-top: 10pt;
+        }
+
+        #coffeeMsg {
+            vertical-align: middle;
+            font-size: 11pt;
+        }
+        #coffeeMsg img {
+            margin: 0pt 4pt 0pt 4pt;
+            vertical-align: middle;
+        }
+        #startDaysOffset {
+            display: none;
+        }
+        #TimeOfDay {
+        	display: none;
+        }
+
+        #clearCitySelection {
+            margin-left: -28px;
+            margin-top: 12px;
+            cursor: pointer;
+            position: absolute;
+            display: none;
+            width: 20px;
+            height: 20px;
+        }
+
+        .autocomplete-suggestions {
+            text-align: left; cursor: default; border: 1px solid #666; border-top: 0; background: #333; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
+
+            /* core styles should not be changed */
+            position: absolute; display: none; z-index: 9999; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
+            border-radius: 0 0 5px 5px;
+        }
+        .autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 50px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: white; }
+        .autocomplete-suggestion b { font-weight: normal; color: #54abe4; }
+        .autocomplete-suggestion.selected { background: #444; }
+
+        #recentPlaces {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        #recentPlaces ul {
+            list-style-type: none;
+            display: inline;
+            margin: 0;
+            padding: 0;
+        }
+        #recentPlaces li {
+            display: inline;
+            padding-right: 4pt;
+            white-space: nowrap;
+        }
+        #recentPlaces a {
+            background: #333;
+            padding: 5px 10px 5px 10px;
+            border: 1px solid #666;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #b9b9b9;
+            font-size: 10pt;
+        }
+        #recentPlaces a:hover {
+            background: #444;
+        }
+    </style>
+    <script>
+    var hasResults = false;
+    var testsPassed = 0;
+
+    var errorPrefix = '';
+    if (window.location.search.indexOf('checkError=true') !== -1) {
+        errorPrefix = 'am:';
+    }
+
+    window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+        console.log('error', errorMsg, url, lineNumber);
+        gtag('event', 'error', {
+            'event_category' : 'error',
+            'event_label' : errorPrefix + errorMsg + ':' + url + ':' + lineNumber
+        });
+        return false;
+    }
+
+    function showTimings() {
+        if (observer.latitude === undefined) {
+            alert('Could not find your location. Please try entering your coordinates instead.');
+            return false;
+        }
+
+        predictor.showVisibleTimes();
+        jQ('#resultsPageContent').scrollTop(0);
+        hasResults = true;
+
+        storeLastSearch();
+
+        return false;
+    }
+
+    function setTabVisible(tab, visible) {
+    	var tabPaneId = tab.attr('data-href');
+    	console.log('set ' + tabPaneId, visible);
+		if (visible === true) {
+			jQ(tabPaneId).fadeIn('fast');
+		} else {
+			jQ(tabPaneId).hide().removeClass('defaultTabPane');
+		}
+    }
+
+    function showTab(tab) {
+    	if (typeof tab === "string") {
+    		tab = jQ(tab);
+    	}
+
+    	var tabs = tab.siblings('.tab');
+
+		tabs.each(function(idx, t) {
+			var tab = jQ(t);
+			setTabVisible(tab, false);
+			tab.removeClass('selectedTab');
+		});
+
+		setTabVisible(tab, true);
+
+		tab.addClass('selectedTab');
+
+        // jQ('#resultsPageContent').scrollTop(0);
+
+		onTabOpen(tab.attr('id'));
+	}
+
+	function onTabOpen(tabId) {
+		if (tabId === 'liveMapTabLabel') {
+			setTimeout(initMap, 400);
+
+            if (hasResults === true) {
+                jQ("#homeTabLabel").attr("data-href", "#resultsPageContent");
+                jQ("#homeTabLabel .tabLabel").text('Results');
+            }
+		} else {
+            jQ("#homeTabLabel").attr("data-href", "#homePageTabContent");
+            jQ("#homeTabLabel .tabLabel").text('Home');
+        }
+	}
+
+    jQ(document).ready(function() {
+    	jQ('.tab').click(function() {
+			var tab = jQ(this);
+			showTab(tab);
+
+			return false;
+		});
+
+    	var selectedTabs = jQ('.selectedTab');
+    	selectedTabs.each(function(idx, tab) {
+    		setTabVisible(jQ(tab), true);
+    	});
+
+    	jQ('#resultsHeader .backIcon').click(function() {
+    		showTab('#homeTabLabel');
+            if (observer.id === undefined) {
+                showTab('#byCoordsTabLabel');
+            } else {
+                showTab('#byNameTabLabel');
+            }
+    		return false;
+    	});
+
+    	jQ('.interactable').hover(function() {
+    		jQ(this).addClass('hover');
+    	}, function() {
+			jQ(this).removeClass('hover');
+    	});
+
+    	jQ('#shareButton').click(function() {
+    		jQ('#shareMenu').fadeToggle('fast');
+    	}).blur(function() {
+    		jQ('#shareMenu').fadeOut('fast');
+    	});
+
+    	jQ('[ripple]').on('click', function (e) {
+		  var rippleDiv = jQ('<div class="ripple" />'),
+		    rippleOffset = jQ(this).offset(),
+		    rippleY = e.pageY - rippleOffset.top,
+		    rippleX = e.pageX - rippleOffset.left,
+		    ripple = jQ('.ripple');
+
+		  rippleDiv.css({
+		    top: '100%',
+		    left: '50%',
+		    background: jQ(this).attr("ripple-color")
+		  }).appendTo(jQ(this));
+
+		  window.setTimeout(function () {
+		    rippleDiv.remove();
+		  }, 400);
+		});
+
+        testsPassed++;
+    });
+
+    // polyfills
+    if (Math.log10 === undefined) {
+        Math.log10 = function (x) { return Math.log(x) / Math.LN10; };
+    }
+
+    // https://tc39.github.io/ecma262/#sec-array.prototype.find
+    if (!Array.prototype.find) {
+      Object.defineProperty(Array.prototype, 'find', {
+        value: function(predicate) {
+          // 1. Let O be ? ToObject(this value).
+          if (this == null) {
+            throw TypeError('"this" is null or not defined');
+          }
+
+          var o = Object(this);
+
+          // 2. Let len be ? ToLength(? Get(O, "length")).
+          var len = o.length >>> 0;
+
+          // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+          if (typeof predicate !== 'function') {
+            throw TypeError('predicate must be a function');
+          }
+
+          // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+          var thisArg = arguments[1];
+
+          // 5. Let k be 0.
+          var k = 0;
+
+          // 6. Repeat, while k < len
+          while (k < len) {
+            // a. Let Pk be ! ToString(k).
+            // b. Let kValue be ? Get(O, Pk).
+            // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+            // d. If testResult is true, return kValue.
+            var kValue = o[k];
+            if (predicate.call(thisArg, kValue, k, o)) {
+              return kValue;
+            }
+            // e. Increase k by 1.
+            k++;
+          }
+
+          // 7. Return undefined.
+          return undefined;
+        },
+        configurable: true,
+        writable: true
+      });
+    }
+    </script>
+</head>
+
+<body>
+    <div id='introPopup'>
+        <div class='contents'>
+            <div class='message'></div>
+
+            <button id="introPopupOKBtn" class='btn bg-primary' type='button'>OK</button>
+        </div>
+        <div id='popupBlanket'></div>
+    </div>
+	<div id='topMarker'></div>
+	<div id='app'>
+		<div id='nav'>
+			<div class='tabs'>
+				<div id='homeTabLabel' class='interactable tab selectedTab' data-href='#homePageTabContent' ripple="ripple" ripple-color="#3880ff">
+					<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M261.56 101.28a8 8 0 00-11.06 0L66.4 277.15a8 8 0 00-2.47 5.79L63.9 448a32 32 0 0032 32H192a16 16 0 0016-16V328a8 8 0 018-8h80a8 8 0 018 8v136a16 16 0 0016 16h96.06a32 32 0 0032-32V282.94a8 8 0 00-2.47-5.79z"></path><path d="M490.91 244.15l-74.8-71.56V64a16 16 0 00-16-16h-48a16 16 0 00-16 16v32l-57.92-55.38C272.77 35.14 264.71 32 256 32c-8.68 0-16.72 3.14-22.14 8.63l-212.7 203.5c-6.22 6-7 15.87-1.34 22.37A16 16 0 0043 267.56L250.5 69.28a8 8 0 0111.06 0l207.52 198.28a16 16 0 0022.59-.44c6.14-6.36 5.63-16.86-.76-22.97z"></path></svg>
+
+					<div class='tabLabel'>Home</div>
+				</div>
+
+				<div id='liveMapTabLabel' class='interactable tab' data-href='#liveMapPageContent' ripple="ripple" ripple-color="#3880ff">
+					<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><circle cx="256" cy="256" r="24"></circle><path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm105.07 113.33l-46.88 117.2a64 64 0 01-35.66 35.66l-117.2 46.88a8 8 0 01-10.4-10.4l46.88-117.2a64 64 0 0135.66-35.66l117.2-46.88a8 8 0 0110.4 10.4z"></path></svg>
+
+					<div class='tabLabel'>Live Map</div>
+				</div>
+
+				<div id='contactTabLabel' class='interactable tab' data-href='#contactPageContent' ripple="ripple" ripple-color="#3880ff">
+                    <a href='mailto:dev@findstarlink.com'>
+    					<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64zm-6 304a20 20 0 1120-20 20 20 0 01-20 20zm33.44-102C267.23 276.88 265 286.85 265 296a14 14 0 01-28 0c0-21.91 10.08-39.33 30.82-53.26C287.1 229.8 298 221.6 298 203.57c0-12.26-7-21.57-21.49-28.46-3.41-1.62-11-3.2-20.34-3.09-11.72.15-20.82 2.95-27.83 8.59C215.12 191.25 214 202.83 214 203a14 14 0 11-28-1.35c.11-2.43 1.8-24.32 24.77-42.8 11.91-9.58 27.06-14.56 45-14.78 12.7-.15 24.63 2 32.72 5.82C312.7 161.34 326 180.43 326 203.57c0 33.83-22.61 49.02-42.56 62.43z"></path></svg>
+
+    					<div class='tabLabel'>Help</div>
+                    </a>
+				</div>
+
+				<div id='resultsTabLabel' class='tab hiddenTab' data-href='#resultsPageContent'>
+					<div class='tabLabel'>Results</div>
+				</div>
+			</div>
+		</div>
+
+
+	    <div id='pageTabs'>
+	    	<div id='homePageTabContent' class='pageContent tabPane defaultTabPane'>
+	    		<div id='header'>
+		    		<div id='homeTitle'>Find Starlink</div>
+		    		<div id='caption'><small><em>Check when you can see it!</em></small></div>
+                    <!-- <div id='announcementHomeBlock'><small><em><span id='announcementHome'>Check when you can see it!</span></em></small></div> -->
+		    	</div>
+
+	    		<div class='container'>
+					<form method="post" name="Tracker" onsubmit="return showTimings()" novalidate>
+		    			<div id='searchBox'>
+		    				<div class='searchBoxHeader bold'>Select your location</div>
+		    				<div class='tabs'>
+		    					<div id='byNameTabLabel' class='interactable tab selectedTab' data-href='#searchBoxByName' ripple="ripple" ripple-color="#3880ff">By Name</div>
+		    					<div id='byCoordsTabLabel' class='interactable tab' data-href='#searchBoxByCoord' ripple="ripple" ripple-color="#3880ff">By Coordinates</div>
+		    				</div>
+
+		    				<div id='searchBoxByName' class="searchBoxPanel tabPane defaultTabPane">
+                                <div id="countryBlock">
+                                    Country: <select id="countrySelection" name="Country" class="inputElement"></select>
+                                </div>
+
+                                <div id="cityBlock">
+                                    Place: <input id="citySelection" name="Position" class="inputElement placesElement" placeholder="Enter your location" />
+
+                                    <img id="clearCitySelection" src="clear.png" />
+                                </div>
+
+                                <div id="recentPlaces">
+                                    <b>Recent: </b>
+                                    <ul></ul>
+                                </div>
+		          			</div>
+
+		          			<div id='searchBoxByCoord' class="searchBoxPanel tabPane">
+		          				<div class="coordsRow">
+									<label for="LatitudeDegrees">Latitude</label>
+									<input name="LatitudeDegrees" class="inputElement coordElement coordsCol" type="number" value="0" onchange="setLatLngDirty(true);onCoordUpdated();/*SetCookie();*/ClearNameOverride();" />
+									<select name="LatitudeDirection" class="inputElement coordElement coordsCol" onchange="setLatLngDirty(true);onCoordUpdated();/*SetCookie();*/ClearNameOverride();">
+		          						<option selected value="North">North</option>
+										<option value="South">South</option>
+		          					</select>
+		          				</div>
+		          				<div class="coordsRow">
+									<label for="LongitudeDegrees">Longitude</label>
+									<input name="LongitudeDegrees" class="inputElement coordElement coordsCol" type="number" value="0" onchange="setLatLngDirty(true);onCoordUpdated();/*SetCookie();*/ClearNameOverride();" />
+									<select name="LongitudeDirection" class="inputElement coordElement coordsCol" onchange="setLatLngDirty(true);onCoordUpdated();/*SetCookie();*/ClearNameOverride();">
+		          						<option selected value="East">East</option>
+										<option value="West">West</option>
+		          					</select>
+		          				</div>
+
+		          				<select class="formEl" name="Days" style="display: none">
+					              <option value="1">next 1 day</option>
+					              <option value="3" selected>next 3 days</option>
+					            </select>
+
+					            <select id='TimeOfDay' class="inputElement coordElement" name="TimeOfDay">
+					              <option value="all" selected>Morning & Evening</option>
+					              <option value="morning">Only mornings</option>
+					              <option value="evening">Only evenings</option>
+					            </select>
+
+					            <span id="startDaysOffset" class="coordsRow">
+					                Show from: 
+					                <select class="inputElement coordElement" name="StartDaysOffset">
+					                  <option value="0" selected>Today</option>
+					                  <option value="-5">5 days ago</option>
+					                  <option value="-9">9 days ago</option>
+                                      <option value="-13">13 days ago</option>
+                                      <option value="-17">17 days ago</option>
+					                  <option value="-20">20 days ago</option>
+					                </select>
+					            </span>
+		          			</div>
+
+                            <button class='btn bg-primary' type='submit'>Find Visible Times</button><br/>
+                            <div style=""><small><span id='announcementHome'></span></small></div>
+		    			</div>
+		    		</form>
+	    		</div>
+
+	    		<div id="homeFooter">
+		            <div class="mediaIcons">
+		            	<a id="pressLink" href="reviews.html" target="_blank">
+							This site in the press:<br/>
+                            <svg class="mediaIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 54"><path d="M113.3 18.2c0-5.8.1-11.2.4-16.2L98.4 4.9v1.4l1.5.2c1.1.1 1.8.5 2.2 1.1.4.7.7 1.7.9 3.2.2 2.9.4 9.5.3 19.9 0 10.3-.1 16.8-.3 19.3 5.5 1.2 9.8 1.7 13 1.7 6 0 10.7-1.7 14.1-5.2 3.4-3.4 5.2-8.2 5.2-14.1 0-4.7-1.3-8.6-3.9-11.7-2.6-3.1-5.9-4.6-9.8-4.6-2.6 0-5.3.7-8.3 2.1zm.3 30.8c-.2-3.2-.4-12.8-.4-28.5.9-.3 2.1-.5 3.6-.5 2.4 0 4.3 1.2 5.7 3.7 1.4 2.5 2.1 5.5 2.1 9.3 0 4.7-.8 8.5-2.4 11.7-1.6 3.1-3.6 4.7-6.1 4.7-.8-.2-1.6-.3-2.5-.4zM41 3H1v2l2.1.2c1.6.3 2.7.9 3.4 1.8.7 1 1.1 2.6 1.2 4.8.8 10.8.8 20.9 0 30.2-.2 2.2-.6 3.8-1.2 4.8-.7 1-1.8 1.6-3.4 1.8l-2.1.3v2h25.8v-2l-2.7-.2c-1.6-.2-2.7-.9-3.4-1.8-.7-1-1.1-2.6-1.2-4.8-.3-4-.5-8.6-.5-13.7l5.4.1c2.9.1 4.9 2.3 5.9 6.7h2V18.9h-2c-1 4.3-2.9 6.5-5.9 6.6l-5.4.1c0-9 .2-15.4.5-19.3h7.9c5.6 0 9.4 3.6 11.6 10.8l2.4-.7L41 3zm-4.7 30.8c0 5.2 1.5 9.5 4.4 12.9 2.9 3.4 7.2 5 12.6 5s9.8-1.7 13-5.2c3.2-3.4 4.7-7.7 4.7-12.9s-1.5-9.5-4.4-12.9c-2.9-3.4-7.2-5-12.6-5s-9.8 1.7-13 5.2c-3.2 3.4-4.7 7.7-4.7 12.9zm22.3-11.4c1.2 2.9 1.7 6.7 1.7 11.3 0 10.6-2.2 15.8-6.5 15.8-2.2 0-3.9-1.5-5.1-4.5-1.2-3-1.7-6.8-1.7-11.3C47 23.2 49.2 18 53.5 18c2.2-.1 3.9 1.4 5.1 4.4zm84.5 24.3c3.3 3.3 7.5 5 12.5 5 3.1 0 5.8-.6 8.2-1.9 2.4-1.2 4.3-2.7 5.6-4.5l-1-1.2c-2.2 1.7-4.7 2.5-7.6 2.5-4 0-7.1-1.3-9.2-4-2.2-2.7-3.2-6.1-3-10.5H170c0-4.8-1.2-8.7-3.7-11.8-2.5-3-6-4.5-10.5-4.5-5.6 0-9.9 1.8-13 5.3-3.1 3.5-4.6 7.8-4.6 12.9 0 5.2 1.6 9.4 4.9 12.7zm7.4-25.1c1.1-2.4 2.5-3.6 4.4-3.6 3 0 4.5 3.8 4.5 11.5l-10.6.2c.1-3 .6-5.7 1.7-8.1zm46.4-4c-2.7-1.2-6.1-1.9-10.2-1.9-4.2 0-7.5 1.1-10 3.2s-3.8 4.7-3.8 7.8c0 2.7.8 4.8 2.3 6.3 1.5 1.5 3.9 2.8 7 3.9 2.8 1 4.8 2 5.8 2.9 1 1 1.6 2.1 1.6 3.6 0 1.4-.5 2.7-1.6 3.7-1 1.1-2.4 1.6-4.2 1.6-4.4 0-7.7-3.2-10-9.6l-1.7.5.4 10c3.6 1.4 7.6 2.1 12 2.1 4.6 0 8.1-1 10.7-3.1 2.6-2 3.9-4.9 3.9-8.5 0-2.4-.6-4.4-1.9-5.9-1.3-1.5-3.4-2.8-6.4-4-3.3-1.2-5.6-2.3-6.8-3.3-1.2-1-1.8-2.2-1.8-3.7s.4-2.7 1.3-3.7 2-1.4 3.4-1.4c4 0 6.9 2.9 8.7 8.6l1.7-.5-.4-8.6zm-96.2-.9c-1.4-.7-2.9-1-4.6-1-1.7 0-3.4.7-5.3 2.1-1.9 1.4-3.3 3.3-4.4 5.9l.1-8-15.2 3v1.4l1.5.1c1.9.2 3 1.7 3.2 4.4.6 6.2.6 12.8 0 19.8-.2 2.7-1.3 4.1-3.2 4.4l-1.5.2v1.9h21.2V49l-2.7-.2c-1.9-.2-3-1.7-3.2-4.4-.6-5.8-.7-12-.2-18.4.6-1 1.9-1.6 3.9-1.8 2-.2 4.3.4 6.7 1.8l3.7-9.3z"></path></svg>
+							<!-- <img class="mediaIcon" src="media/florida-today.png" /> -->
+							<img class="mediaIcon" src="media/wired-it.png" />
+							<img class="mediaIcon" src="media/yahoo-news.png" />
+						</a>
+		            </div>
+
+		            <br/>
+		            <small>The amazing Starlink "train" pictured in the background</small>
+		        </div>
+
+		        <canvas id="animCanvas" width="300" height="150"></canvas>
+	    	</div>
+
+	    	<div id='liveMapPageContent' class='pageContent tabPane'>
+	    		<div id="mapContainer">
+			        <div id="mapTitle">Where is Starlink right now?</div>
+			        <div id="livemap"></div>
+			    </div>
+	    	</div>
+
+	    	<div id='contactPageContent' class='pageContent tabPane'>
+	    		<div id="contactMsg" class="container">
+	    			<div class='iconContainer'>
+	    				<svg class="icon" viewBox="0 0 512 512"><path d="M461.81 53.81a4.4 4.4 0 00-3.3-3.39c-54.38-13.3-180 34.09-248.13 102.17a294.9 294.9 0 00-33.09 39.08c-21-1.9-42-.3-59.88 7.5-50.49 22.2-65.18 80.18-69.28 105.07a9 9 0 009.8 10.4l81.07-8.9a180.29 180.29 0 001.1 18.3 18.15 18.15 0 005.3 11.09l31.39 31.39a18.15 18.15 0 0011.1 5.3 179.91 179.91 0 0018.19 1.1l-8.89 81a9 9 0 0010.39 9.79c24.9-4 83-18.69 105.07-69.17 7.8-17.9 9.4-38.79 7.6-59.69a293.91 293.91 0 0039.19-33.09c68.38-68 115.47-190.86 102.37-247.95zM298.66 213.67a42.7 42.7 0 1160.38 0 42.65 42.65 0 01-60.38 0z" stroke-linecap="round" stroke-linejoin="round" class="ionicon-fill-none ionicon-stroke-width"></path><path d="M109.64 352a45.06 45.06 0 00-26.35 12.84C65.67 382.52 64 448 64 448s65.52-1.67 83.15-19.31A44.73 44.73 0 00160 402.32" stroke-linecap="round" stroke-linejoin="round" class="ionicon-fill-none ionicon-stroke-width"></path></svg>
+	    			</div>
+
+					<br/><br/><br/>
+
+					Using this site, you can find out when the Starlink satellites are expected to be visible at your location.
+
+					<br/><br/>
+
+                    <!--<b>If you didn't see Starlink over UK this week or had "canceled" timings</b>, I'm really sorry for it not working out. I've written more about the issue <a href="uk-failed-sightings.html" target="_blank">here</a>. Thanks, and sorry for the trouble!<br/><br/>-->
+
+					Some common questions have been answered below. If there are any other questions or problems, you can email me at <a href="mailto:dev@findstarlink.com">dev@findstarlink.com</a> and I can try to help.
+
+					<br/><br/>
+
+					If you found this site useful, please consider <a class="coffeeBtn" data-id="coffee-top" href="https://ko-fi.com/cmdr2dev" target="_blank">buying me a coffee</a> to help keep the site free of advertisements.
+
+					<br/><br/>
+
+					Thanks for using this and enjoy gazing at the beautiful night sky! :)
+
+                    <br/><br/><br/>
+
+                    <b id="faqHeader">--- Common Questions ---</b>
+
+                    <br/><br/>
+
+                    <b>What's the number next to BRIGHT/DIM?</b><br/>
+                    The number next to DIM/BRIGHT e.g. (2.5) is the brightness magnitude. The smaller the number, the brighter it is.
+
+                    <br/><br/>
+
+                    <b>What does DIM mean?</b><br/>
+                    DIM means the satellite might not be very visible.
+
+                    <br/><br/>
+
+                    <b>Do I need to convert to my timezone?</b><br/>
+                    The time is always local, you do NOT need to convert it. Daylight-savings/summer/winter are already included, if required.
+
+                    <br/><br/>
+
+                    <b>Why was the satellite very far away on the Live Map when it was supposed to be over me?</b><br/>
+                    The satellites move at an unbelievable speed. They travel nearly 500 km/300 miles EVERY MINUTE. But because they're so high up in the sky, you can still see them. So don't worry about the Live Map, the Results page is what you should believe.
+
+                    <br/><br/>
+
+                    <b>Why are there only a few satellites in this app? Doesn't Starlink have hundreds of satellites?</b><br/>
+                    Yes, there are hundreds of them. Many are in groups of 30-40 satellites, and fly in a "chain" formation. So this app tracks only the first satellite in every "chain" of satellites. That way, when you see the first satellite in a chain, the rest will follow behind in that chain. Otherwise the results page will be very cluttered.
+
+                    <br/><br/>
+
+                    <b>Where are the older Starlink groups, like Starlink-1, 2, 3, etc?</b><br/>
+                    Starlink is launched in groups of 60 satellites per launch. These 60 satellites initially fly in a "chain" formation, but over time they spread out and move to their own orbits. The older chains like Starlink-1, 2, 3 etc have spread out and are no longer visible as a chain, that's why this app doesn't include them anymore.
+
+                    <br/><br/>
+
+                    <b>How can the satellites be visible again less than 2 hours after being seen?</b><br/>
+                    Please see above. The satellites move really fast, and travel the entire world in 90 minutes. Every 90 minutes, they return to the same point (but a little further away). That's why sometimes you can see them again within 2 hours of a previous sighting.
+                    </div>
+	    		</div>
+	    	</div>
+
+	    	<div id='resultsPageContent' class='pageContent tabPane'>
+	    		<div id="noVisibilityReminderNudge">
+	    			<svg id="warning" class="icon" viewBox="0 0 512 512"><path d="M449.07 399.08L278.64 82.58c-12.08-22.44-44.26-22.44-56.35 0L51.87 399.08A32 32 0 0080 446.25h340.89a32 32 0 0028.18-47.17zm-198.6-1.83a20 20 0 1120-20 20 20 0 01-20 20zm21.72-201.15l-5.74 122a16 16 0 01-32 0l-5.74-121.95a21.73 21.73 0 0121.5-22.69h.21a21.74 21.74 0 0121.73 22.7z"></path></svg>
+
+	    			Sorry, the newest Starlink isn't very visible at your location during the next 5 days. This might change in the coming weeks, due to changing orbits. The older Starlinks might still be visible (please see below).<!--<br/><br/>
+
+	    			If you'd like, I can automatically email you a few days before the new Starlink will be visible (no spam, promise): 
+
+		            <form
+		                action="https://cmdr2.us3.list-manage.com/subscribe/post?u=d1cab20765d99d265758ba2e4&amp;id=e3344b4843"
+		                method="post" id="mc-embedded-subscribe-form"
+		                style="display: inline"
+		                name="mc-embedded-subscribe-form" class="validate" target="_blank"
+		                novalidate>
+
+		                    <input class="email" type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="email goes here" size="20">
+		                    <input
+		                        type="hidden" name="b_d1cab20765d99d265758ba2e4_e3344b4843"
+		                        tabindex="-1" value="">
+
+		                    <input type="hidden" name="LOCATION" id="LOCATION" value="-1" />
+
+		                    <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn btn-xsmall bg-primary" value="Yes, let me know" />
+
+		                    &nbsp;<span id="mce-responses">
+		                        <span class="response" id="mce-error-response"
+		                            style="display:none; color: #ff4961"></span>
+		                        <span class="response" id="mce-success-response"
+		                            style="display:none; color: #2fdf75"></span>
+		                    </span>
+
+		                    <br/>
+		                </form>-->
+		        </div>
+
+		        <div id="resultsParent">
+		        	<div id="resultsHeader" class="navHeader">
+		        		<span class="interactable backIcon navHeaderCol1" ripple="ripple" ripple-color="#3880ff">
+		        			<svg class="icon" viewBox="0 0 512 512"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292" class="ionicon-fill-none"></path></svg>
+		        		</span>
+
+		        		<span class="navHeaderCol2">
+		        			<span id="resultsTitle">Results</span>
+		        		</span>
+
+		        		<span class="navHeaderCol3">
+		        			<button id="shareButton" type='button' class='btn btn-small bg-tertiary'>Share</button>
+		        		</span>
+
+		        		<ul id="shareMenu">
+					    	<li>
+					    		<a id='pageUrl' href="#" target='_blank'>
+						    		<svg class="icon strokedIcon" viewBox="0 0 512 512"><path d="M200.66 352H144a96 96 0 010-192h55.41M312.59 160H368a96 96 0 010 192h-56.66M169.07 256h175.86" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" class="ionicon-fill-none"></path></svg>
+
+						    		<span>Link</span>
+						    	</a>
+					    	</li>
+					    	<li>
+					    		<a id='twitterURL' href="#" target='_blank'>
+						    		<svg class="icon twitterIcon" viewBox="0 0 512 512"><path d="M496 109.5a201.8 201.8 0 01-56.55 15.3 97.51 97.51 0 0043.33-53.6 197.74 197.74 0 01-62.56 23.5A99.14 99.14 0 00348.31 64c-54.42 0-98.46 43.4-98.46 96.9a93.21 93.21 0 002.54 22.1 280.7 280.7 0 01-203-101.3A95.69 95.69 0 0036 130.4c0 33.6 17.53 63.3 44 80.7A97.5 97.5 0 0135.22 199v1.2c0 47 34 86.1 79 95a100.76 100.76 0 01-25.94 3.4 94.38 94.38 0 01-18.51-1.8c12.51 38.5 48.92 66.5 92.05 67.3A199.59 199.59 0 0139.5 405.6a203 203 0 01-23.5-1.4A278.68 278.68 0 00166.74 448c181.36 0 280.44-147.7 280.44-275.8 0-4.2-.11-8.4-.31-12.5A198.48 198.48 0 00496 109.5z"></path></svg>
+
+						    		<span>Twitter</span>
+					    		</a>
+					    	</li>
+					    	<li>
+					    		<a id='fbURL' href="#" target='_blank'>
+						    		<svg class="icon fbIcon" viewBox="0 0 512 512"><path d="M455.27 32H56.73A24.74 24.74 0 0032 56.73v398.54A24.74 24.74 0 0056.73 480H256V304h-53.55v-64H256v-51c0-57.86 40.13-89.36 91.82-89.36 24.73 0 51.33 1.86 57.51 2.68v60.43h-41.18c-28.12 0-33.48 13.3-33.48 32.9V240h67l-8.75 64h-58.25v176h124.6A24.74 24.74 0 00480 455.27V56.73A24.74 24.74 0 00455.27 32z"></path></svg>
+
+						    		<span>Facebook</span>
+						    	</a>
+					    	</li>
+					    </ul>
+		        	</div>
+
+		        	<div id="resultsBox">
+		        		<div id="resultsMeta"></div>
+
+		        		<div id="resultsMetaTemplate" style="display: none">
+		        			<div class='metaInfo'>
+			        			<div class='metaRow'>
+			        				<svg class="icon" viewBox="0 0 512 512"><circle cx="256" cy="192" r="32"></circle><path d="M256 32c-88.22 0-160 68.65-160 153 0 40.17 18.31 93.59 54.42 158.78 29 52.34 62.55 99.67 80 123.22a31.75 31.75 0 0051.22 0c17.42-23.55 51-70.88 80-123.22C397.69 278.61 416 225.19 416 185c0-84.35-71.78-153-160-153zm0 224a64 64 0 1164-64 64.07 64.07 0 01-64 64z"></path></svg>
+
+			        				<span id="resultsPlaceName" class="resultsTopInfo">{placeName}</span>
+			        			</div>
+
+			        			<div class='metaRow'>
+			        				<svg class="icon" viewBox="0 0 512 512"><path d="M256 118a22 22 0 01-22-22V48a22 22 0 0144 0v48a22 22 0 01-22 22zM256 486a22 22 0 01-22-22v-48a22 22 0 0144 0v48a22 22 0 01-22 22zM369.14 164.86a22 22 0 01-15.56-37.55l33.94-33.94a22 22 0 0131.11 31.11l-33.94 33.94a21.93 21.93 0 01-15.55 6.44zM108.92 425.08a22 22 0 01-15.55-37.56l33.94-33.94a22 22 0 1131.11 31.11l-33.94 33.94a21.94 21.94 0 01-15.56 6.45zM464 278h-48a22 22 0 010-44h48a22 22 0 010 44zM96 278H48a22 22 0 010-44h48a22 22 0 010 44zM403.08 425.08a21.94 21.94 0 01-15.56-6.45l-33.94-33.94a22 22 0 0131.11-31.11l33.94 33.94a22 22 0 01-15.55 37.56zM142.86 164.86a21.89 21.89 0 01-15.55-6.44l-33.94-33.94a22 22 0 0131.11-31.11l33.94 33.94a22 22 0 01-15.56 37.55zM256 358a102 102 0 11102-102 102.12 102.12 0 01-102 102z"></path></svg>
+
+			        				<span id="resultsSunInfo" class="resultsTopInfo">Sunrise: {results.sunrise}, Sunset: {results.sunset}</span>
+			        			</div>
+
+			        			<div class='metaRow'>
+			        				<svg class="icon" viewBox="0 0 512 512"><path d="M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208 208-93.13 208-208S370.87 48 256 48zm96 240h-96a16 16 0 01-16-16V128a16 16 0 0132 0v128h80a16 16 0 010 32z"></path></svg>
+
+			        				<span id="resultsTimezone" class="resultsTopInfo"><span title="{results.timezoneOffset}">All times displayed in {results.timezoneOffsetText}</span></span>
+			        			</div>
+							</div>
+						</div>
+
+						<div id='resultsMessageBlock'>
+                            <div class="resultsMessage" id="resultsServerMsg">
+                                <div style="display: none">{results.message}</div>
+                                <span id='announcementResults'>Please note, these timings are not 100% accurate, since the orbit of the satellites change often, and without warning. Even if the satellites pass over you, many things need to go right for them to reflect enough sunlight to be seen. I apologize if there are failed attempts. Thanks!</span>
+                            </div>
+
+							<div class="resultsMessage" id="coffeePitch">
+								If you found this site useful, please consider <a class="coffeeBtn" data-id="coffee-top" href="https://ko-fi.com/cmdr2dev" target="_blank">buying me a coffee</a> to help keep the site ad-free.
+							</div>
+
+							<div class="resultsMessage">
+								Actual times may vary by 10 mins. Please <a href="mailto:dev@findstarlink.com" target="_blank">let me know</a> if you see Starlink using this page (or if you don't).
+							</div>
+
+							<div class="resultsMessage">
+								An app for <a id="appLinkApple" href="https://apps.apple.com/app/find-starlink-satellites/id1501517711" class="appLink" data-id="st_apple2" target="_blank">iPhone/iPad</a> and <a id="appLinkAndroid" href="https://play.google.com/store/apps/details?id=com.findstarlink" class="appLink" data-id="st_android2" target="_blank">Android</a> is also available, to set reminders.
+							</div>
+						</div>
+
+		        		<div id="goodTimingsBlock">
+		        			<div id='noVisibilityNudgeSlot'></div>
+                            <div class="timingHeader">Timings with good visibility</div>
+		        			<div id="goodTimingsError" class="timingEntry entryHeader">Sorry, no timings found with good visibility in the next 5 days!</div>
+		        			<div id="goodTimings">
+		        			</div>
+		        		</div>
+
+                        <div id="avgTimingsBlock">
+                            <div class="timingHeader">Timings with average visibility</div>
+                            <div id="avgTimings">
+
+                            </div>
+                        </div>
+
+		        		<div id="poorTimingsBlock">
+		        			<div class="timingHeader">Timings with poor visibility</div>
+		        			<div id="poorTimings">
+		        				
+		        			</div>
+		        		</div>
+		        	</div>
+
+		        	<div id="resultTimingTemplate" style="display: none">
+		        		<div class='timingEntry'>
+		        			<div class="entryHeader">
+								<span class="entryTiming bold">{entry.start.time}, {entry.start.date}</span>
+								<!--button class="remindMe">Remind me</button-->
+							</div>
+							<div class="timingEntryBottom">
+								{entry.title}, <span class="{brightnessLabel}">{entry.brightnessText}</span> <small>({entry.brightness})</small> for {entry.mins} mins
+								<br/>
+								Look from <span class="bold">{entry.startDirText}</span><span class="timingDetail"> ({entry.startDir}&deg;)</span> to <span class="bold">{entry.endDirText}</span><span class="timingDetail"> ({entry.endDir}&deg;)</span> <small class='timingDetailsBtn'>(<a href='#'>details</a>)</small>
+								<br/>
+								Elevation (from horizon): start: {entry.startElev}&deg;, max: {entry.maxElev}&deg;, end: {entry.endElev}&deg;
+                                <div class="timingNote"></div>
+							</div>
+						</div>
+		        	</div>
+
+		        	<div id="store">
+                        <div id="coffeeMsg">If you found this site useful and want to help keep it alive, please 
+				            <a class="coffeeBtn" data-id="coffee-results" href="https://ko-fi.com/cmdr2dev" target="_blank"><img src="media/kofi.png" alt="Buy Me A Coffee" style="height: 35px !important" ></a> to cover the costs and keep the site free of advertisements! Thank you for your support!</div>
+				    </div>
+		        </div>
+	    	</div>
+
+	    </div>
+	</div>
+
+<script src="moment.min.js"></script>
+<script src="tz.js"></script>
+<script src="moment-timezone-with-data-10-year-range.min.js?v=0.5.43"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="oldToNew.js?v=2021.6.4.0"></script>
+<script src="cities.js?v=2021.6.13.0"></script>
+<script src="satellite.min.js"></script>
+<script src="https://findstarlink.com/data/tle.js?v=1660650237"></script>
+<script src="sat-timings.js?v=2021.6.6.1"></script>
+<script src="suncalc.js?v=1000"></script>
+<script src="auto-complete.min.js"></script>
+<script src="main.js?v=2021.6.29.0"></script>
+
+<script>
+    jQ(document).ready(function() {
+        jQ('#introPopupOKBtn').click(function() {
+            jQ('#introPopup').hide();
+        });
+
+        jQ("#citySelection").focus(function() {
+            var recentEl = jQ("#recentPlaces li");
+            if (recentEl.length > 0) {
+                jQ("#recentPlaces").fadeIn('fast');
+            }
+        }).blur(function() {
+            jQ("#recentPlaces").fadeOut('fast');
+        });
+
+        jQ('#clearCitySelection').click(function() {
+            Tracker.Position.value = '';
+            jQ(Tracker.Position).focus();
+        });
+
+        jQ('#citySelection').on('input focus change', function() {
+            if (jQ(this).val() === '') {
+                jQ('#clearCitySelection').hide();
+            } else {
+                jQ('#clearCitySelection').show();
+            }
+
+            return false;
+        });
+
+        jQ('#countrySelection').on('change', function() {
+            Tracker.Position.value = '';
+            jQ('#clearCitySelection').hide();
+        })
+
+        populateRecentPlaces();
+    })
+
+    // load cities
+    // var cityDropdown = document.getElementById('cityDropdown');
+    // cityDropdown.innerHTML = sites;
+
+    function showStore() {
+        jQ("#store").fadeIn();
+    }
+
+    // ugly hacks begin, because I'm lazy
+    var hash = window.location.hash;
+    if (hash !== "" && hash !== "#") {
+        setTimeout(function() {
+            hash = hash.substring(1);
+
+            var pParams = hash.split(";");
+            var locationP = pParams[0],
+                pageP = "3";
+
+            var p = locationP.split(",");
+            if (p.length === 1) {
+                var locationId = parseInt(p[0]);
+                if (oldToNew[locationId] !== undefined) {
+                    locationId = oldToNew[locationId];
+                }
+
+                setCityById(locationId);
+            } else if (p.length >= 4) {
+                var c = coordStringToFloat(p[0], p[1], p[2], p[3]);
+
+                setCoord(c[0], c[1]);
+
+                setLatLngDirty(true);
+
+                if (pParams.length === 3) {
+                    ui.nameOverride = pParams[2];
+                }
+            } else {
+                return;
+            }
+
+            Tracker.Days.value = pageP;
+
+            predictor.showVisibleTimes();
+        }, 400);
+    } else {
+        populateLastSearch(); // from cookies
+    }
+
+    if (window.location.search.indexOf('allowPastTimings=true') !== -1) {
+        jQ('#startDaysOffset').show();
+    }
+
+    testsPassed++;
+</script>
+<script>
+// critical section done
+jQ(document).ready(function() {
+    setTimeout(function() {
+        var contact = jQ('#contactTabLabel a');
+        if (testsPassed >= 2) {
+            contact.replaceWith('<div>' + contact.html() + '</div>');
+        } else {
+            contact.css('color', 'red');
+            contact.css('fill', 'red');
+            gtag('event', 'criticalError', {
+                'event_category' : 'criticalError',
+                'event_label' : 'testFailed'
+            });
+        }
+    }, 1000);
+});
+</script>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" crossorigin="" />
+<style>
+.leaflet-tile {
+	filter: invert(1) grayscale(1) brightness(2.1);
+}
+
+.leaflet-control-attribution a {
+	color: #333;
+}
+</style>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/@joergdietrich/leaflet.terminator@1.0.0/L.Terminator.js"></script>
+
+<script>
+    var map, myIcon;
+
+    var liveSatIcons = [];
+    var sats = getActiveSats();
+    var trackColors = ['#ffd534', '#2fdf75', '#f72323', '#98caff', 'purple', 'white'];
+
+    function initMap() {
+		if (map !== undefined) {
+			return;
+		}
+
+		try {
+            var latestSat = sats[0];
+			var satLiveCoords = predictor.getCurrentSatelliteCoords(latestSat);
+
+	        map = L.map('livemap').setView(satLiveCoords, 2);
+	        myIcon = L.marker(getMyCoords()).addTo(map);
+
+	        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		    }).addTo(map);
+
+		  // var daynight = L.terminator();
+		  // daynight.addTo(map);
+
+		  	sats.forEach(function(sat) {
+			    var satIcon = L.icon({
+			        iconUrl: 'media/sat-icon.png',
+			        iconSize: [36, 36]
+			    });
+
+			    var satLiveCoords = predictor.getCurrentSatelliteCoords(sat);
+			    var liveSatIcon = L.marker(satLiveCoords, {
+			        icon: satIcon
+			    }).bindTooltip(sat.title, {
+			        permanent: true,
+			        direction: 'right'
+			    }).addTo(map);
+
+			    liveSatIcons.push(liveSatIcon);
+			});
+
+			setInterval(function() {
+			    redrawSats();
+
+			    myIcon.setLatLng(getMyCoords());
+
+			    // var t2 = L.terminator();
+			    // daynight.setLatLngs(t2.getLatLngs());
+			    // daynight.redraw();
+			}, 1000);
+
+			setInterval(redrawAllSatTracks, 20 * 1000); // every 20 sec
+	    	redrawAllSatTracks();
+	    } catch (e) {
+	    	console.log(e);
+	    }
+    }
+
+    function redrawSats() {
+        sats.forEach(function(sat, idx) {
+            var satLiveCoords = predictor.getCurrentSatelliteCoords(sat);
+            liveSatIcons[idx].setLatLng(satLiveCoords);
+        });
+    }
+
+    var lines = sats.map(function() {return []});
+
+    function redrawSatTrack(sat, satIndex) {
+        var pathResult = predictor.getSatellitePath(sat);
+        var track = pathResult.path;
+        var pointList = [];
+        var prev = -1;
+
+        lines[satIndex].forEach(function(prevLine) {
+            prevLine.remove();
+        });
+        lines[satIndex] = [];
+
+        track.forEach(function(coord, idx) {
+            var pathCoord = coord;
+
+            var pt = new L.LatLng(pathCoord[0], pathCoord[1]);
+
+            var d = 0;
+
+            if (prev !== -1) {
+                var d0 = prev[0] - pathCoord[0];
+                var d1 = prev[1] - pathCoord[1];
+                d = Math.sqrt(d0 * d0 + d1 * d1);
+            }
+
+            if (idx === track.length - 1 || d > 20) {
+                var line = new L.Polyline(pointList, {
+                    color: trackColors[satIndex],
+                    weight: 2,
+                    opacity: 0.5,
+                    smoothFactor: 1
+                });
+                line.addTo(map);
+                lines[satIndex].push(line);
+
+                pointList = [];
+            }
+
+            pointList.push(pt);
+
+            prev = pathCoord;
+        });
+    }
+
+    function redrawAllSatTracks() {
+        sats.forEach(function(sat, satIndex) {
+            redrawSatTrack(sat, satIndex);
+        });
+    }
+</script>
+
+<script src="https://get.geojs.io/v1/ip/geo.js?callback=processLocationData&client=com.findstarlink"></script>
+<script>
+if (!ui.geolocated && !hasLastSearch() && navigator.geolocation) {
+    console.log('auto-geolocation failed, trying user');
+    navigator.geolocation.getCurrentPosition(geoSuccess);
+}
+
+function geoSuccess(pos) {
+    processLocationData({latitude: pos.coords.latitude, longitude: pos.coords.longitude});
+}
+</script>
+
+<script>
+var STRINGS = undefined;
+
+jQ.get('https://findstarlink.com/data/strings_en-US.json?v=1000', function(data) {
+    if (data === undefined) {
+        return;
+    }
+
+    STRINGS = data;
+
+    var announcementHome = STRINGS['announcementHome'];
+    var announcementResults = STRINGS['announcementResults'];
+    var announcementPopup = STRINGS['announcementPopup'];
+
+    if (announcementHome !== undefined) {
+        jQ('#announcementHome').html(announcementHome);
+    }
+    if (announcementResults !== undefined) {
+        jQ('#announcementResults').html(announcementResults);
+    }
+    if (announcementPopup !== undefined && announcementPopup !== "") {
+        jQ('#introPopup .message').html(announcementPopup);
+        jQ('#introPopup').show();
+    }
+
+    for (var key in STRINGS) {
+        if (key.indexOf('note_') === 0) {
+            jQ('.' + key).html(STRINGS[key]).show();
+        }
+    }
+});
+</script>
+
+<script>
+function initRender() {
+    var canvas = document.getElementById('animCanvas');
+    var WIDTH = window.innerWidth;
+    var HEIGHT = window.innerHeight;
+
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+    var ctx = canvas.getContext("2d");
+    if (ctx === null || ctx === undefined) {
+    	throw 'Canvas tag not implemented!';
+    }
+
+    ctx.strokeStyle = "white";
+    ctx.fillStyle = "#eee";
+    ctx.clearStyle = "black";
+
+
+    var DOT_SCALE = HEIGHT / 600;
+    var SPEED = 15 * DOT_SCALE;
+
+    var slopeAngle = 25 * 0.3 * DOT_SCALE;
+    var slope = Math.tan(slopeAngle * Math.PI / 180);
+    var c = 420;
+
+    var dots = [0, 10, 10, 30, 50, 52, 70, 73, 84, 88, 120, 125, 128, 150, 170, 230, 235, 249, 257, 260, 270, 275, 300, 320, 330, 345, 348, 351, 360, 390, 400, 410, 460];
+
+    dots = dots.map(function(dotX) {return (dotX * 2 * DOT_SCALE) - 0});
+
+    var prevTS = -1;
+    var pastFrameTimes = [];
+    var frameDropForgives = 4;
+    var testsLeft = 10;
+    const INITING = 0, TESTING = 1, RENDERING = 2;
+    var displayState = INITING;
+
+    function render(ts) {
+      // ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+      if (displayState === RENDERING) {
+        for (var i = dots.length - 1; i >= 0; i--) {
+          var dotX = dots[i];
+
+          var y = slope * dotX + c * DOT_SCALE;
+          y = HEIGHT - y;
+          ctx.clearRect(dotX - 10, y - 10, 20, 20);
+        }
+      }
+
+      var dt = 0;
+      if (prevTS != -1) {
+        dt = ts - prevTS;
+      }
+
+      var dx = SPEED * dt / 1000;
+
+      if (displayState === INITING || displayState === RENDERING) {
+        for (var i = dots.length - 1; i >= 0; i--) {
+          var dotX = dots[i];
+
+          dotX += dx;
+
+          if (dotX > WIDTH) {
+            dotX -= WIDTH * 1.5;
+          }
+
+          dots[i] = dotX;
+
+          if (dotX < 0 || dotX > WIDTH) {
+            continue;
+          }
+
+          var y = slope * dotX + c * DOT_SCALE;
+          y = HEIGHT - y;
+
+          ctx.beginPath();
+          // ctx.drawImage(dotImg, dotX, y, 3 * DOT_SCALE, 3 * DOT_SCALE);
+          ctx.arc(dotX, y, 1 * DOT_SCALE, 0, Math.PI*2);
+
+          ctx.fill();
+        };
+      }
+
+      prevTS = ts;
+
+      if (displayState === INITING) {
+        displayState = TESTING;
+      }
+
+      pastFrameTimes.push(dt);
+
+      if (pastFrameTimes.length > 120) {
+        pastFrameTimes.pop();
+      }
+
+      if (pastFrameTimes.length === 120) {
+        var avgFrameTime = pastFrameTimes.reduce(function(total, e) {return total+e;});
+        avgFrameTime /= pastFrameTimes.length;
+
+        if (avgFrameTime > 33) {
+          if (displayState === TESTING) {
+            if (testsLeft-- === 0) {
+              console.log('ah, screw it. avgFrameTime is too high: ' + avgFrameTime);
+              return;
+            } else {
+              console.log('test failed, retrying');
+              pastFrameTimes = [];
+            }
+          }
+
+          if (frameDropForgives-- > 0) {
+            pastFrameTimes = [];
+            console.log('forgiven framedrop');
+          } else {
+            console.log('ah, screw it. avgFrameTime is too high: ' + avgFrameTime);
+            return;
+          }
+        } else {
+          displayState = RENDERING;
+        }
+      }
+
+      requestAnimationFrame(render);
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  jQ(document).ready(function() {
+  	try {
+  		initRender();
+  	} catch (e) {
+  		console.log('err', e);
+
+  		var dottedLine = new Image();
+  		dottedLine.src = '/media/dot-line.png';
+  		dottedLine.className = 'dottedLine';
+
+  		jQ('#homePageTabContent').append(dottedLine);
+  	}
+  });
+</script>
+
+<script>
+    var mce_email_focused = false;
+    jQ('#mce-EMAIL').focus(function() {
+        if (!mce_email_focused) {
+            gtag('event', 'sign_up', {method: 'textbox_clicked'});
+            mce_email_focused = true;
+        }
+    });
+
+    jQ('#mc-embedded-subscribe').click(function() {
+        gtag('event', 'sign_up', {method: 'submit_clicked'});
+    });
+
+    /*jQ('.productBox a').click(function() {
+        var prodId = jQ(this).parents('.productBox').attr('data-id');
+        gtag('event', 'select_content', {content_type: prodId});
+    });*/
+
+    /*jQ('.productLink').click(function() {
+        var prodId = jQ(this).attr('data-id');
+        gtag('event', 'select_content', {content_type: prodId});
+    });*/
+
+    jQ('.coffeeBtn').click(function() {
+        var locationId = jQ(this).attr('data-id');
+        gtag('event', 'donate_lead', {
+            'event_category' : 'donate_lead',
+            'event_label' : locationId
+        });
+    });
+
+    jQ('.appLink').click(function() {
+        var appId = jQ(this).attr('data-id');
+        gtag('event', 'app_lead_gen', {
+            'event_category' : 'app_lead_gen',
+            'event_label' : appId
+        });
+    });
+
+    jQ('.outboundLink').click(function() {
+        var linkId = jQ(this).attr('data-id');
+        gtag('event', 'outbound_link', {
+            'event_category' : 'outbound_link',
+            'event_label' : linkId
+        });
+    });
+
+    jQ('#pageUrl').click(onShare('page'));
+    jQ('#twitterUrl').click(onShare('twitter'));
+    jQ('#fbUrl').click(onShare('fb'));
+</script>
+
+<!--script type='text/javascript'
+src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script
+type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQ));var $mcj = jQ.noConflict(true);</script-->
+
+</html>

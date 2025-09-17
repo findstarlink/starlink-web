@@ -1,11 +1,11 @@
 /*@font-face {
   font-family: 'SourceSansPro-Regular';
-  src: url('/media/SourceSansPro-Regular.ttf');
+  src: url('/images/SourceSansPro-Regular.ttf');
 }
 
 @font-face {
   font-family: 'SourceSansPro-Bold';
-  src: url('/media/SourceSansPro-Bold.ttf');
+  src: url('/images/SourceSansPro-Bold.ttf');
 }
 */
 /*@media only screen and (orientation:landscape){
@@ -30,7 +30,7 @@ select {
 	font-family: 'Source Sans Pro', 'Arial', sans-serif;
 }
 #homePageTabContent {
-	background: url('/media/star-bg.jpg') repeat center center fixed;
+	background: url('/images/star-bg.jpg') repeat center center fixed;
 }
 .dottedLine {
 	height: 4px;
@@ -478,7 +478,7 @@ input[type=number] {
 	height: 90%;
 	position: absolute;
 	overflow-y: scroll;
-	background: url('/media/star-bg.jpg') repeat center center fixed;
+	background: url('/images/star-bg.jpg') repeat center center fixed;
 }
 #resultsParent {
 	margin: auto;

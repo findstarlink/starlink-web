@@ -1096,14 +1096,17 @@ function geoSuccess(pos) {
 </script>
 
 <script>
-var STRINGS = undefined;
+// Dynamically load strings_en-US.js as an async script
+function loadStringsScript(callback) {
+    var script = document.createElement('script');
+    script.src = 'https://data.findstarlink.com/strings_en-US.js';
+    script.async = true;
+    script.onload = callback;
+    document.head.appendChild(script);
+}
 
-jQ.get('https://data.findstarlink.com/strings_en-US.json?v=1000', function(data) {
-    if (data === undefined) {
-        return;
-    }
-
-    STRINGS = data;
+function onStringsLoaded() {
+    if (typeof STRINGS === 'undefined') return;
 
     var announcementHome = STRINGS['announcementHome'];
     var announcementResults = STRINGS['announcementResults'];
@@ -1125,6 +1128,10 @@ jQ.get('https://data.findstarlink.com/strings_en-US.json?v=1000', function(data)
             jQ('.' + key).html(STRINGS[key]).show();
         }
     }
+}
+
+jQ(function() {
+    loadStringsScript(onStringsLoaded);
 });
 </script>
 

@@ -41,7 +41,7 @@ select {
 #homeTitle {
 	font-size: 19pt;
 	text-align: center;
-	margin-top: 8%;
+	margin-top: 6%;
 	color: white;
 	margin-bottom: 10pt;
 }
@@ -193,6 +193,7 @@ a {
 
 #caption {
 	text-align: center;
+	padding: 0pt 10pt 0pt 10pt;
 }
 
 .searchBoxPanel {
@@ -464,7 +465,7 @@ input[type=number] {
 		margin: auto;
 	}
 	#homeTitle {
-		margin-top: 20%;
+		margin-top: 10%;
 		font-size: 29pt;
 	}
 	#homeFooter {

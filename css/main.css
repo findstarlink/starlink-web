@@ -896,3 +896,232 @@ ripple {  0% {
 	 opacity: 0;
 	}
 }
+
+/* dumped from index.html */
+.headNote {
+	border: 1px solid #999;
+	font-size: 10pt;
+	padding: 8pt;
+	margin-bottom: 5px;
+	border-radius: 3px;
+	margin: 5px;
+}
+.error {
+	background: rgb(255, 220, 220);
+}
+.info {
+	background: #ffffdc;
+}
+
+#formControls {
+	font-size: 11pt;
+}
+
+.formEl {
+	padding: 2pt;
+}
+
+.hiddenEl {
+	display: none;
+}
+
+#visibilityInfo {
+	border: 1px solid #999;
+	border-radius: 3px;
+	margin: 5px;
+	padding: 8pt;
+	display: none;
+}
+#visibilityInfo h3 {
+	margin: 0pt;
+}
+#visibilityInfo h4 {
+	margin: 0pt;
+	padding: 10pt 0pt 10pt 0pt;
+}
+#unlikelyTimes h4>small {
+	color: red;
+}
+.timingLine {
+	font-size: 10pt;
+	padding: 7pt 0pt 7pt 0pt;
+}
+.timingLineSelected {
+	background: rgb(253, 245, 230);
+	margin-left: -5pt;
+	padding-left: 5pt;
+	padding-right: 5pt;
+	border: 1pt solid rgb(255, 236, 200);
+}
+.timingDetails {
+	display: none;
+}
+.noTimingsMsg {
+	font-size: 10pt;
+}
+.satNameEntry {
+	display: inline-block;
+	width: 90pt;
+}
+
+
+#store ul {
+	padding: 0px;
+	margin: auto;
+}
+#store li {
+	list-style-type: none;
+	display: inline;
+}
+#store h4 {
+	margin: 0px;
+	padding: 0px;
+	padding-bottom: 10pt;
+}
+#storeDisclosure {
+	color: #666;
+	font-size: 8pt;
+	text-align: right;
+	padding-top: 5pt;
+}
+
+#mapContainer h4 {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#footer {
+	font-size: 12px;
+	border-top: 1px solid #eee;
+	padding: 10px;
+}
+
+#mce-success-response {
+	color: green;
+}
+
+a.toggleUpdate {
+	margin: 10px;
+	text-decoration: none;
+}
+
+.head {
+	display: block;
+	margin: 0;
+	padding: 10px;
+	background: #000;
+	color: #fff;
+}
+
+.hidden {
+	display: none;
+}
+
+.productBox {
+	width: 100pt;
+	text-align: center;
+	display: inline-block;
+	vertical-align: top;
+	padding-bottom: 10pt;
+}
+.productBox a {
+	color: #0066c0;
+	text-decoration: none;
+	font-weight: normal;
+}
+.productImgHolder {
+	padding-bottom: 8pt;
+}
+.productImgHolder img {
+	height: 85pt;
+}
+.productTitle {
+	font-size: 10pt;
+}
+
+.singleProductImgHolder  {
+	text-align: center;
+}
+.singleProductImgCaption {
+	font-size: 10pt;
+	color: #666;
+	width: 95%;
+	text-align: center;
+}
+.singleProductHeadline {
+	font-size: 15pt;
+	font-weight: bold;
+	padding: 5pt 0pt 5pt 0pt;
+}
+.singleProductCopy {
+	font-size: 11pt;
+}
+.singleProductCTA {
+	font-size: 11pt;
+	padding-top: 10pt;
+}
+
+#coffeeMsg {
+	vertical-align: middle;
+	font-size: 11pt;
+}
+#coffeeMsg img {
+	margin: 0pt 4pt 0pt 4pt;
+	vertical-align: middle;
+}
+#startDaysOffset {
+	display: none;
+}
+#TimeOfDay {
+	display: none;
+}
+
+#clearCitySelection {
+	margin-left: -28px;
+	margin-top: 12px;
+	cursor: pointer;
+	position: absolute;
+	display: none;
+	width: 20px;
+	height: 20px;
+}
+
+.autocomplete-suggestions {
+	text-align: left; cursor: default; border: 1px solid #666; border-top: 0; background: #333; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
+
+	/* core styles should not be changed */
+	position: absolute; display: none; z-index: 9999; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
+	border-radius: 0 0 5px 5px;
+}
+.autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 50px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: white; }
+.autocomplete-suggestion b { font-weight: normal; color: #54abe4; }
+.autocomplete-suggestion.selected { background: #444; }
+
+#recentPlaces {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: none;
+}
+#recentPlaces ul {
+	list-style-type: none;
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+#recentPlaces li {
+	display: inline;
+	padding-right: 4pt;
+	white-space: nowrap;
+}
+#recentPlaces a {
+	background: #333;
+	padding: 5px 10px 5px 10px;
+	border: 1px solid #666;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #b9b9b9;
+	font-size: 10pt;
+}
+#recentPlaces a:hover {
+	background: #444;
+}

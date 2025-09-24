@@ -18,12 +18,23 @@ jobs:
       run: |-
         mkdir build
         rsync -av --exclude '.git' --exclude '.github' --exclude 'README.md' --exclude 'LICENSE' --exclude 'build' ./ build/
+    - name: Compress each file using brotli
+      run: |-
+        # compress each file and rename to the original file name (without the .br extension, i.e. preserve original file names)
+        find build -type f -exec brotli --force {} \;
+        find build -type f -name '*.br' -exec sh -c 'mv "$1" "${1%.br}"' _ {} \;
+    # - name: Compress each file using gzip
+    #   run: |-
+    #     # compress each file and rename to the original file name (without the .gz extension, i.e. preserve original file names)
+    #     find build -type f -exec gzip --force {} \;
+    #     find build -type f -name '*.gz' -exec sh -c 'mv "$1" "${1%.gz}"' _ {} \;
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: build
         path: build
-  deploy_to_cloudflare_pages_on_main_push:
+
+  deploy_to_aws_s3_on_main_push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -36,9 +47,19 @@ jobs:
       with:
         name: build
         path: .
-    - name: Deploy to Cloudflare Pages
-      uses: cloudflare/wrangler-action@v3
+    - name: Install s3-sync-changes
+      run: |-
+        curl -L -o /tmp/s3-sync-changes.py https://github.com/cmdr2/s3-sync-changes/releases/latest/download/s3-sync-changes.py
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
       with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        command: pages deploy . --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+        role-to-assume: ${{ secrets.S3_DEPLOY_ROLE }}
+        aws-region: us-east-1
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+    - name: Sync Changed Files to S3
+      run: |-
+        python /tmp/s3-sync-changes.py '.' 's3://findstarlink.com' --acl public-read --content-encoding 'br' --auto-content-type
+      # python /tmp/s3-sync-changes.py '.' 's3://findstarlink.com' --acl public-read --content-encoding 'gzip' --auto-content-type
